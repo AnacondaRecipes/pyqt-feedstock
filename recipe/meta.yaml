@@ -47,15 +47,15 @@ requirements:
     - {{ cdt('libxdamage') }}            # [linux]
     - {{ cdt('libxfixes') }}             # [linux]
     - {{ cdt('libxxf86vm') }}            # [linux]
-    - python
     - dbus  # [not win]
-    - qt 5.6.*
-    - sip 4.18.*
     - pkg-config  # [not win]
     - jom  # [win]
+  host:
+    - python
+    - sip 4.18.*
+    - qt 5.6.*
   run:
     - python
-    - qt 5.6.*
     - sip 4.18.*
 
 test:
