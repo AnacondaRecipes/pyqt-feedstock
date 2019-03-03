@@ -1,17 +1,26 @@
-{% set version = "5.9.2" %}
+{% set version = "5.11.3" %}
+{% set sip_version = "4.19.13" %}
 
 package:
   name: pyqt
   version: {{ version }}
 
 source:
-  url:  http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.9.2/PyQt5_gpl-5.9.2.tar.gz
-  sha1: 058c5b37981b515cc4e16faa04a4a6d8892cdaa9
-  patches:
-    - 0001-Ignore-lack-of-shared-python-lib.patch
+  - url: http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-{{ version }}/PyQt5_gpl-{{ version }}.tar.gz
+    # 5.11.3
+    sha1: 497c25e36ad982034d2a18075f34a67eb113fba8
+    # 5.11.2
+    # sha1: c865073fb614520b18c4f44bc4cbea711a0ab2a4 
+    patches:
+      - 0001-Ignore-lack-of-shared-python-lib.patch
+  - url: http://sourceforge.net/projects/pyqt/files/sip/sip-{{ sip_version }}/sip-{{ sip_version }}.tar.gz
+    sha256: e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e
+    folder: sip
+    patches:
+      - 0001-Do-not-override-CC-CXX-LINK-in-sipgen-Makefile.patch
 
 build:
-  number: 3
+  number: 0
   skip: true  # [win and py27]
   skip: true  # [ppc64le]
   run_exports:
@@ -49,22 +58,25 @@ requirements:
     - {{ cdt('libxfixes') }}             # [linux]
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('mesa-libgbm') }}           # [linux]
-    - jom  # [win]
-    - pkg-config  # [not win]
+    - jom                                # [win]
+    - pkg-config                         # [not win]
   host:
     - python
-    - sip >=4.19.4,<=4.19.8
-    - dbus  # [not win]
-    - qt 5.9.*
+    - enum34                             # [py==27]
+    - dbus                               # [linux]]
+    - qt 5.12.*
   run:
     - python
-    - sip >=4.19.4,<=4.19.8
-    - qt 5.9.*
+    - enum34                             # [py==27]
+    # Not sure if this is necessary?
+    # (it could even be harmful, see comment in build.sh)
+    - sip >=4.19.13,<4.20a0
 
 test:
   files:
     - pyqt_test.py
   imports:
+    - PyQt5.sip
     - PyQt5.QtCore
     - PyQt5.QtGui
     - PyQt5.QtWebEngineWidgets

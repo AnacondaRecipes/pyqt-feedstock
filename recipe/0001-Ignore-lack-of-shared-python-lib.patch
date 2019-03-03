@@ -1,5 +1,32 @@
 --- work/configure.py.orig	2018-08-24 06:13:26.000000000 -0700
 +++ work/configure.py	2018-08-24 06:13:51.000000000 -0700
+@@ -680,16 +680,16 @@
+             if dynamic_pylib:
+                 pyshlib = ducfg.get('LDLIBRARY', '')
+ 
+-                exec_prefix = ducfg['exec_prefix']
+-                multiarch = ducfg.get('MULTIARCH', '')
+-                libdir = ducfg['LIBDIR']
+-
+-                if glob.glob('%s/lib/libpython%d.%d*' % (exec_prefix, py_major, py_minor)):
+-                    pylib_dir = exec_prefix + '/lib'
+-                elif multiarch != '' and glob.glob('%s/lib/%s/libpython%d.%d*' % (exec_prefix, multiarch, py_major, py_minor)):
+-                    pylib_dir = exec_prefix + '/lib/' + multiarch
+-                elif glob.glob('%s/libpython%d.%d*' % (libdir, py_major, py_minor)):
+-                    pylib_dir = libdir
++            exec_prefix = ducfg['exec_prefix']
++            multiarch = ducfg.get('MULTIARCH', '')
++            libdir = ducfg['LIBDIR']
++
++            if glob.glob('%s/lib/libpython%d.%d*' % (exec_prefix, py_major, py_minor)):
++                pylib_dir = exec_prefix + '/lib'
++            elif multiarch != '' and glob.glob('%s/lib/%s/libpython%d.%d*' % (exec_prefix, multiarch, py_major, py_minor)):
++                pylib_dir = exec_prefix + '/lib/' + multiarch
++            elif glob.glob('%s/libpython%d.%d*' % (libdir, py_major, py_minor)):
++                pylib_dir = libdir
+ 
+         self.py_pylib_dir = pylib_dir
+         self.py_pylib_lib = pylib_lib
 @@ -1664,9 +1664,9 @@
      """
  
