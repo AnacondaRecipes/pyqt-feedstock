@@ -55,12 +55,12 @@ requirements:
     - pkg-config  # [not win]
   host:
     - python
-    - sip >=4.19.4,<=4.19.8
+    - sip >=4.19.4
     - dbus  # [not win]
     - qt 5.9.*
   run:
     - python
-    - sip >=4.19.4,<=4.19.8
+    - sip >=4.19.4
     - qt 5.9.*
 
 test:
