@@ -1,0 +1,11 @@
+--- work/sip/QtQuickWidgets/qquickwidget.sip.orig	2018-11-07 10:57:28.217594671 +0100
++++ work/sip/QtQuickWidgets/qquickwidget.sip	2018-11-07 10:56:08.221371298 +0100
+@@ -67,7 +67,7 @@
+     QSurfaceFormat format() const;
+ 
+ public slots:
+-    void setSource(const QUrl &);
++    void setSource(const QUrl &) /ReleaseGIL/;
+ 
+ signals:
+     void statusChanged(QQuickWidget::Status);
