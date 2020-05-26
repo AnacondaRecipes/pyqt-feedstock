@@ -1,4 +1,4 @@
-{% set version = "5.9.2" %}
+{% set version = "5.14.2" %}
 
 package:
   name: pyqt
@@ -11,7 +11,7 @@ source:
     - 0001-Ignore-lack-of-shared-python-lib.patch
 
 build:
-  number: 4
+  number: 0
   skip: true  # [win and py27]
   skip: true  # [ppc64le]
   run_exports:
