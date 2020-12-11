@@ -13,7 +13,7 @@ source:
     - 0004-configure-winbat.patch  # [win]
 
 build:
-  number: 4
+  number: 5
   skip: true  # [win and py27]
   skip: true  # [ppc64le]
   run_exports:
@@ -55,12 +55,17 @@ requirements:
     - pkg-config  # [not win]
   host:
     - python
-    - sip >=4.19.4
-    - dbus  # [not win]
+    # technically sip >=4.19.4 is supported, however, there are some changes in 4.19.19 that do not work during the build process.
+    # currently, the repodata is hotfixed to pin tightly to sip. adding it here for more transparency.
+    - sip >=4.19.13,<=4.19.14
+    # removing this dependency as it is a requirement of qt, not this. there is optinal pyqt support
+    # for dbus_python, however that package is not yet a part of defaults. It is an second dbus implementation outside of QtDBus.
+    # https://www.riverbankcomputing.com/static/Docs/PyQt5/dbus.html
+    # - dbus  # [not win]
     - qt 5.9.*
   run:
     - python
-    - sip >=4.19.4
+    - sip >=4.19.13,<=4.19.14
     - qt 5.9.*
 
 test:
