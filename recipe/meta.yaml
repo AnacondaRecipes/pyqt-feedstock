@@ -1,4 +1,4 @@
-{% set version = "5.15.2" %}
+{% set version = "5.15.6" %}
 {% set version2 = "5.15" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: https://distfiles.macports.org/py-pyqt5/PyQt5-{{ version }}.tar.gz
-    sha256: 372b08dc9321d1201e4690182697c5e7ffb2e0770e6b4a45519025134b12e4fc
+    sha256: 80343bcab95ffba619f2ed2467fd828ffeb0a251ad7225be5fc06dcc333af452
     patches:
       - 0003-configure.patch
       # remove build path from .bat
@@ -17,7 +17,7 @@ source:
     folder: pyqt5
 
   - url: https://www.riverbankcomputing.com/static/Downloads/sip/4.19.25/sip-4.19.25.tar.gz
-    sha256: b39d93e937647807bac23579edbff25fe46d16213f708370072574ab1f1b4211
+    sha256: 80343bcab95ffba619f2ed2467fd828ffeb0a251ad7225be5fc06dcc333af452
     patches:
       - 0001-Do-not-override-CC-CXX-LINK-in-sipgen-Makefile.patch
       # AttributeError: module 'distutils.sysconfig' has no attribute 'get_config_h_filename'
@@ -25,11 +25,11 @@ source:
     folder: sip
 
   - url: https://distfiles.macports.org/py-pyqt5/PyQtWebEngine-{{ version }}.tar.gz
-    sha256: 4d72fea774071ce6f76e341a3d2c5d595886c9906a9b9493239c841cce54a634
+    sha256: 80343bcab95ffba619f2ed2467fd828ffeb0a251ad7225be5fc06dcc333af452
     folder: pyqtwebengine
     
   - url: https://distfiles.macports.org/py-pyqt5/PyQtChart-{{ version }}.tar.gz
-    sha256: 93a6212fb4944d8266ec1f1c10c6e857a06ae6ffb55377ebef58c817b629cbf0
+    sha256: 80343bcab95ffba619f2ed2467fd828ffeb0a251ad7225be5fc06dcc333af452
     folder: pyqtcharts
 
 build:
