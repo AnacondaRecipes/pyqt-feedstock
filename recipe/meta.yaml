@@ -53,6 +53,8 @@ requirements:
     - {{ cdt('mesa-libgbm') }}           # [linux]
     - jom  # [win]
     - pkg-config  # [not win]
+    - patch  # [not win]
+    - m2-patch  # [win]
   host:
     - python
     # technically sip >=4.19.4 is supported, however, there are some changes in 4.19.19 that do not
