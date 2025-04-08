@@ -30,7 +30,7 @@ if [[ $(uname) == "Darwin" ]]; then
     
     # Fix Qt version compatibility issue (6.7.3 -> 6.7.2)
     echo "Creating Qt version compatibility symlinks (6.7.3 -> 6.7.2)"
-    QT_MODULES=("Quick" "QmlModels" "OpenGL" "Gui" "WebChannel" "Qml" "Network" "Core" "WebChannelQuick")
+    QT_MODULES=("Quick" "QmlModels" "OpenGL" "Gui" "WebChannel" "Qml" "Network" "Core" "WebChannelQuick" "PrintSupport" "Widgets")
     
     for module in "${QT_MODULES[@]}"; do
         source_lib="${PREFIX}/lib/libQt6${module}.6.7.3.dylib"
