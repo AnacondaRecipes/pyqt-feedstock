@@ -1,0 +1,4 @@
+# The version of Qt packages being built against must match because sip detects the version for some things in qt-main
+# and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
+qt_version:
+  - 6.7.3

@@ -1,9 +1,8 @@
 {% set version = "6.7.1" %}
-{% set webengine_version = "6.7.0" %}
-{% set qt_sip_version = "13.9.1" %}
+{% set pyqt_webengine_version = "6.7.0" %}
+{% set pyqt_sip_version = "13.9.1" %}
 
-{% set version_major_minor = ".".join(version.split(".")[:-1]) %}
-{% set sip_pkg_name = "PyQt" + version[0] + "-sip" %}
+{% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
 package:
   name: pyqt-split
@@ -14,11 +13,11 @@ source:
     sha256: 3672a82ccd3a62e99ab200a13903421e2928e399fda25ced98d140313ad59cb9
     folder: pyqt
 
-  - url: https://pypi.io/packages/source/P/{{ sip_pkg_name }}/{{ sip_pkg_name.replace("-", "_") | lower }}-{{ qt_sip_version }}.tar.gz
+  - url: https://pypi.io/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
     sha256: 15be741d1ae8c82bb7afe9a61f3cf8c50457f7d61229a1c39c24cd6e8f4d86dc
     folder: pyqt_sip
 
-  - url: https://pypi.io/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ webengine_version }}.tar.gz
+  - url: https://pypi.io/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
     sha256: 68edc7adb6d9e275f5de956881e79cca0d71fad439abeaa10d823bff5ac55001
     folder: pyqt_webengine
 
@@ -28,8 +27,8 @@ build:
   skip: True  # [osx and x86_64]
 
 outputs:
-  - name: {{ sip_pkg_name | lower }}
-    version: {{ qt_sip_version }}
+  - name: {{ pyqt_sip_pkg_name | lower }}
+    version: {{ pyqt_sip_version }}
     script: build-pyqt-sip.sh  # [not win]
     script: bld-pyqt-sip.bat   # [win]
     requirements:
@@ -104,15 +103,15 @@ outputs:
         - python
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
-        - qtbase {{ version_major_minor }}
-        - qtdeclarative {{ version_major_minor }}
-        - qtsvg {{ version_major_minor }}
-        - qttools {{ version_major_minor }}
-        - qtwebchannel {{ version_major_minor }}
-        - qtwebsockets {{ version_major_minor }}
+        - qtbase {{ qt_version }}
+        - qtdeclarative {{ qt_version }}
+        - qtsvg {{ qt_version }}
+        - qttools {{ qt_version }}
+        - qtwebchannel {{ qt_version }}
+        - qtwebsockets {{ qt_version }}
       run:
         - python
-        - {{ pin_subpackage(sip_pkg_name | lower, exact=True) }}
+        - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
     test:
       files:
         - pyqt_test.py
@@ -154,7 +153,7 @@ outputs:
         - pip check
 
   - name: pyqtwebengine
-    version: {{ webengine_version }}
+    version: {{ pyqt_webengine_version }}
     script: build-pyqtwebengine.sh  # [not win]
     script: bld-pyqtwebengine.bat   # [win]
     build:
@@ -205,10 +204,10 @@ outputs:
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
-        - qtbase {{ version_major_minor }}
-        - qtdeclarative {{ version_major_minor }}
-        - qtwebchannel {{ version_major_minor }}
-        - qtwebengine {{ version_major_minor }}
+        - qtbase {{ qt_version }}
+        - qtdeclarative {{ qt_version }}
+        - qtwebchannel {{ qt_version }}
+        - qtwebengine {{ qt_version }}
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
