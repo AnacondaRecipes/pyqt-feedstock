@@ -1,36 +1,33 @@
 {% set version = "6.7.1" %}
 {% set pyqt_webengine_version = "6.7.0" %}
 {% set pyqt_sip_version = "13.9.1" %}
-
-{% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
+{% set pyqt_sip_pkg_name = """PyQt" + version[0] + "-sip""" %}
 
 package:
   name: pyqt-split
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/P/PyQt{{ version[0] }}/PyQt{{ version[0] }}-{{ version }}.tar.gz
+  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/PyQt{{ version[0] }}-{{ version }}.tar.gz
     sha256: 3672a82ccd3a62e99ab200a13903421e2928e399fda25ced98d140313ad59cb9
     folder: pyqt
-
-  - url: https://pypi.io/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
+  - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
     sha256: 15be741d1ae8c82bb7afe9a61f3cf8c50457f7d61229a1c39c24cd6e8f4d86dc
     folder: pyqt_sip
-
-  - url: https://pypi.io/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
+  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
     sha256: 68edc7adb6d9e275f5de956881e79cca0d71fad439abeaa10d823bff5ac55001
     folder: pyqt_webengine
 
 build:
-  number: 1
-  skip: True  # [py<38]
-  skip: True  # [osx and x86_64]
+  number: 3
+  skip: true  # [py<38]
+  skip: true  # [osx and x86_64]
 
 outputs:
   - name: {{ pyqt_sip_pkg_name | lower }}
     version: {{ pyqt_sip_version }}
     script: build-pyqt-sip.sh  # [not win]
-    script: bld-pyqt-sip.bat   # [win]
+    script: bld-pyqt-sip.bat  # [win]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -39,6 +36,62 @@ outputs:
         - setuptools
         - wheel
         - pip
+        - xorg-xproto
+        - xorg-libx11
+        - xorg-libxext
+        - xorg-libxrender
+        - libgl-devel
+        - mesa-dri-drivers
+        - xorg-libxau
+        - xorg-libxcomposite
+        - xorg-libxcursor
+        - xorg-libxi
+        - xorg-libxrandr
+        - xorg-libxscrnsaver
+        - xorg-libxtst
+        - xorg-libxdamage
+        - xorg-libxfixes
+        - xorg-libxxf86vm
+        - xorg-libsm
+        - xorg-libice
+        - libxcb
+        - libgl-devel
+        - xorg-xproto
+        - xorg-libx11
+        - xorg-libxext
+        - mesa-dri-drivers
+        - xorg-libxdamage
+        - xorg-libxfixes
+        - xorg-libxxf86vm
+        - libxcb
+        - xorg-xproto
+        - xorg-libx11
+        - xorg-libxext
+        - xorg-libxrender
+        - libgl-devel
+        - mesa-dri-drivers
+        - xorg-libxau
+        - xorg-libxcomposite
+        - xorg-libxcursor
+        - xorg-libxi
+        - xorg-libxrandr
+        - xorg-libxscrnsaver
+        - xorg-libxtst
+        - xorg-libxdamage
+        - xorg-libxfixes
+        - xorg-libxxf86vm
+        - xorg-libsm
+        - xorg-libice
+        - libxcb
+        - libgl-devel
+        - xorg-xproto
+        - xorg-libx11
+        - xorg-libxext
+        - mesa-dri-drivers
+        - xorg-libxdamage
+        - xorg-libxfixes
+        - xorg-libxxf86vm
+        - libxcb
       run:
         - python
     test:
@@ -48,11 +101,10 @@ outputs:
         - pip
       commands:
         - pip check
-
   - name: pyqt
     version: {{ version }}
     script: build-pyqt.sh  # [not win]
-    script: bld-pyqt.bat   # [win]
+    script: bld-pyqt.bat  # [win]
     build:
       entry_points:
         - pyuic{{ version[0] }} = PyQt{{ version[0] }}.uic.pyuic:main
@@ -66,38 +118,28 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libgbm') }}           # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('expat-devel') }}           # [linux and x86_64]
-        - {{ cdt('pcre') }}                  # [linux and aarch64]
-        - {{ cdt('libglvnd-devel') }}        # [linux and aarch64]
-        - jom                                # [win]
-        - make                               # [not win]
+        # TODO: map CDT mesa-libgbm to new X11 package
+        # - { cdt('mesa-libgbm') }
+        # TODO: map CDT mesa-libegl-devel to new X11 package
+        # - { cdt('mesa-libegl-devel') }
+        # TODO: map CDT alsa-lib-devel to new X11 package
+        # - { cdt('alsa-lib-devel') }
+        # TODO: map CDT gtk2-devel to new X11 package
+        # - { cdt('gtk2-devel') }
+        # TODO: map CDT gtkmm24-devel to new X11 package
+        # - { cdt('gtkmm24-devel') }
+        # TODO: map CDT libdrm-devel to new X11 package
+        # - { cdt('libdrm-devel') }
+        # TODO: map CDT pciutils-devel to new X11 package
+        # - { cdt('pciutils-devel') }
+        # TODO: map CDT libselinux-devel to new X11 package
+        # - { cdt('libselinux-devel') }
+        # TODO: map CDT expat-devel to new X11 package
+        # - { cdt('expat-devel') }
+        # TODO: map CDT pcre to new X11 package
+        # - { cdt('pcre') }
+        - jom  # [win]
+        - make  # [not win]
         - pkg-config
       host:
         - python
@@ -119,43 +161,56 @@ outputs:
         - PyQt{{ version[0] }}
       requires:
         - pip
-        - {{ cdt('xorg-x11-proto-devel') }}        # [linux]
-        - {{ cdt('libx11-devel') }}                # [linux]
-        - {{ cdt('libxext') }}               # [linux]
-        - {{ cdt('libxrender') }}            # [linux]
-        - {{ cdt('mesa-libgl') }}            # [linux]
-        - {{ cdt('mesa-libgbm') }}           # [linux]
-        - {{ cdt('mesa-libegl') }}           # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau') }}                # [linux]
-        - {{ cdt('alsa-lib') }}              # [linux]
-        - {{ cdt('gtk2') }}                  # [linux]
-        - {{ cdt('gtkmm24') }}               # [linux]
-        - {{ cdt('libdrm') }}                # [linux]
-        - {{ cdt('libxcomposite') }}         # [linux]
-        - {{ cdt('libxcursor') }}            # [linux]
-        - {{ cdt('libxi') }}                 # [linux]
-        - {{ cdt('libxrandr') }}             # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver') }}         # [linux]
-        - {{ cdt('libxtst') }}               # [linux]
-        - {{ cdt('libselinux') }}            # [linux]
-        - {{ cdt('libxdamage') }}            # [linux]
-        - {{ cdt('libxfixes') }}             # [linux]
-        - {{ cdt('libxxf86vm') }}            # [linux]
-        - {{ cdt('libsm') }}                 # [linux]
-        - {{ cdt('libice') }}                # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('expat') }}                 # [linux and x86_64]
-        - {{ cdt('pcre') }}                  # [linux and aarch64]
-        - {{ cdt('libglvnd') }}              # [linux and aarch64]
+        # TODO: map CDT libxrender to new X11 package
+        # - { cdt('libxrender') }
+        # TODO: map CDT mesa-libgl to new X11 package
+        # - { cdt('mesa-libgl') }
+        # TODO: map CDT mesa-libgbm to new X11 package
+        # - { cdt('mesa-libgbm') }
+        # TODO: map CDT mesa-libegl to new X11 package
+        # - { cdt('mesa-libegl') }
+        # TODO: map CDT libxau to new X11 package
+        # - { cdt('libxau') }
+        # TODO: map CDT alsa-lib to new X11 package
+        # - { cdt('alsa-lib') }
+        # TODO: map CDT gtk2 to new X11 package
+        # - { cdt('gtk2') }
+        # TODO: map CDT gtkmm24 to new X11 package
+        # - { cdt('gtkmm24') }
+        # TODO: map CDT libdrm to new X11 package
+        # - { cdt('libdrm') }
+        # TODO: map CDT libxcomposite to new X11 package
+        # - { cdt('libxcomposite') }
+        # TODO: map CDT libxcursor to new X11 package
+        # - { cdt('libxcursor') }
+        # TODO: map CDT libxi to new X11 package
+        # - { cdt('libxi') }
+        # TODO: map CDT libxrandr to new X11 package
+        # - { cdt('libxrandr') }
+        # TODO: map CDT pciutils-devel to new X11 package
+        # - { cdt('pciutils-devel') }
+        # TODO: map CDT libxscrnsaver to new X11 package
+        # - { cdt('libxscrnsaver') }
+        # TODO: map CDT libxtst to new X11 package
+        # - { cdt('libxtst') }
+        # TODO: map CDT libselinux to new X11 package
+        # - { cdt('libselinux') }
+        # TODO: map CDT libsm to new X11 package
+        # - { cdt('libsm') }
+        # TODO: map CDT libice to new X11 package
+        # - { cdt('libice') }
+        # TODO: map CDT expat to new X11 package
+        # - { cdt('expat') }
+        # TODO: map CDT pcre to new X11 package
+        # - { cdt('pcre') }
+        # TODO: map CDT libglvnd to new X11 package
+        # - { cdt('libglvnd') }
       commands:
         - pip check
-
   - name: pyqtwebengine
     version: {{ pyqt_webengine_version }}
     script: build-pyqtwebengine.sh  # [not win]
-    script: bld-pyqtwebengine.bat   # [win]
+    script: bld-pyqtwebengine.bat  # [win]
     build:
       run_exports:
         - {{ pin_subpackage('pyqtwebengine', max_pin='x.x') }}
@@ -167,37 +222,26 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('expat-devel') }}           # [linux and x86_64]
-        - {{ cdt('pcre') }}                  # [linux and aarch64]
-        - {{ cdt('libglvnd-devel') }}        # [linux and aarch64]
-        - jom                                # [win]
-        - make                               # [not win]
+        # TODO: map CDT mesa-libegl-devel to new X11 package
+        # - { cdt('mesa-libegl-devel') }
+        # TODO: map CDT alsa-lib-devel to new X11 package
+        # - { cdt('alsa-lib-devel') }
+        # TODO: map CDT gtk2-devel to new X11 package
+        # - { cdt('gtk2-devel') }
+        # TODO: map CDT gtkmm24-devel to new X11 package
+        # - { cdt('gtkmm24-devel') }
+        # TODO: map CDT libdrm-devel to new X11 package
+        # - { cdt('libdrm-devel') }
+        # TODO: map CDT pciutils-devel to new X11 package
+        # - { cdt('pciutils-devel') }
+        # TODO: map CDT libselinux-devel to new X11 package
+        # - { cdt('libselinux-devel') }
+        # TODO: map CDT expat-devel to new X11 package
+        # - { cdt('expat-devel') }
+        # TODO: map CDT pcre to new X11 package
+        # - { cdt('pcre') }
+        - jom  # [win]
+        - make  # [not win]
         - pkg-config
       host:
         - python
@@ -216,35 +260,48 @@ outputs:
         - PyQt{{ version[0] }}
       requires:
         - pip
-        - {{ cdt('xorg-x11-proto-devel') }}    # [linux]
-        - {{ cdt('libx11-devel') }}            # [linux]
-        - {{ cdt('libxext') }}           # [linux]
-        - {{ cdt('libxrender') }}        # [linux]
-        - {{ cdt('mesa-libgl') }}        # [linux]
-        - {{ cdt('mesa-libegl') }}       # [linux]
-        - {{ cdt('mesa-dri-drivers') }}  # [linux]
-        - {{ cdt('libxau') }}            # [linux]
-        - {{ cdt('alsa-lib') }}          # [linux]
-        - {{ cdt('gtk2') }}              # [linux]
-        - {{ cdt('gtkmm24') }}           # [linux]
-        - {{ cdt('libdrm') }}            # [linux]
-        - {{ cdt('libxcomposite') }}     # [linux]
-        - {{ cdt('libxcursor') }}        # [linux]
-        - {{ cdt('libxi') }}             # [linux]
-        - {{ cdt('libxrandr') }}         # [linux]
-        - {{ cdt('pciutils-devel') }}    # [linux]
-        - {{ cdt('libxscrnsaver') }}     # [linux]
-        - {{ cdt('libxtst') }}           # [linux]
-        - {{ cdt('libselinux') }}        # [linux]
-        - {{ cdt('libxdamage') }}        # [linux]
-        - {{ cdt('libxfixes') }}         # [linux]
-        - {{ cdt('libxxf86vm') }}        # [linux]
-        - {{ cdt('libsm') }}             # [linux]
-        - {{ cdt('libice') }}            # [linux]
-        - {{ cdt('libxcb') }}            # [linux]
-        - {{ cdt('expat') }}             # [linux and x86_64]
-        - {{ cdt('pcre') }}              # [linux and aarch64]
-        - {{ cdt('libglvnd') }}          # [linux and aarch64]
+        # TODO: map CDT libxrender to new X11 package
+        # - { cdt('libxrender') }
+        # TODO: map CDT mesa-libgl to new X11 package
+        # - { cdt('mesa-libgl') }
+        # TODO: map CDT mesa-libegl to new X11 package
+        # - { cdt('mesa-libegl') }
+        # TODO: map CDT libxau to new X11 package
+        # - { cdt('libxau') }
+        # TODO: map CDT alsa-lib to new X11 package
+        # - { cdt('alsa-lib') }
+        # TODO: map CDT gtk2 to new X11 package
+        # - { cdt('gtk2') }
+        # TODO: map CDT gtkmm24 to new X11 package
+        # - { cdt('gtkmm24') }
+        # TODO: map CDT libdrm to new X11 package
+        # - { cdt('libdrm') }
+        # TODO: map CDT libxcomposite to new X11 package
+        # - { cdt('libxcomposite') }
+        # TODO: map CDT libxcursor to new X11 package
+        # - { cdt('libxcursor') }
+        # TODO: map CDT libxi to new X11 package
+        # - { cdt('libxi') }
+        # TODO: map CDT libxrandr to new X11 package
+        # - { cdt('libxrandr') }
+        # TODO: map CDT pciutils-devel to new X11 package
+        # - { cdt('pciutils-devel') }
+        # TODO: map CDT libxscrnsaver to new X11 package
+        # - { cdt('libxscrnsaver') }
+        # TODO: map CDT libxtst to new X11 package
+        # - { cdt('libxtst') }
+        # TODO: map CDT libselinux to new X11 package
+        # - { cdt('libselinux') }
+        # TODO: map CDT libsm to new X11 package
+        # - { cdt('libsm') }
+        # TODO: map CDT libice to new X11 package
+        # - { cdt('libice') }
+        # TODO: map CDT expat to new X11 package
+        # - { cdt('expat') }
+        # TODO: map CDT pcre to new X11 package
+        # - { cdt('pcre') }
+        # TODO: map CDT libglvnd to new X11 package
+        # - { cdt('libglvnd') }
       commands:
         - pip check
 
@@ -277,4 +334,3 @@ extra:
     - ocefpaf
     - jschueller
   feedstock-name: pyqt
-
