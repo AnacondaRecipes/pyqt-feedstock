@@ -3,3 +3,6 @@
 build_parameters:
   - "--suppress-variables"
   - "--skip-existing"
+
+channels:
+  - https://staging.continuum.io/prefect/fs/mesalib-feedstock/pr1/e7fea05

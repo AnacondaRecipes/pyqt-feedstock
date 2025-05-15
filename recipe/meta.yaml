@@ -19,7 +19,7 @@ source:
     folder: pyqt_webengine
 
 build:
-  number: 3
+  number: 2
   skip: true  # [py<38]
   skip: true  # [osx and x86_64]
 
@@ -36,62 +36,6 @@ outputs:
         - setuptools
         - wheel
         - pip
-        - xorg-xproto
-        - xorg-libx11
-        - xorg-libxext
-        - xorg-libxrender
-        - libgl-devel
-        - mesa-dri-drivers
-        - xorg-libxau
-        - xorg-libxcomposite
-        - xorg-libxcursor
-        - xorg-libxi
-        - xorg-libxrandr
-        - xorg-libxscrnsaver
-        - xorg-libxtst
-        - xorg-libxdamage
-        - xorg-libxfixes
-        - xorg-libxxf86vm
-        - xorg-libsm
-        - xorg-libice
-        - libxcb
-        - libgl-devel
-        - xorg-xproto
-        - xorg-libx11
-        - xorg-libxext
-        - mesa-dri-drivers
-        - xorg-libxdamage
-        - xorg-libxfixes
-        - xorg-libxxf86vm
-        - libxcb
-        - xorg-xproto
-        - xorg-libx11
-        - xorg-libxext
-        - xorg-libxrender
-        - libgl-devel
-        - mesa-dri-drivers
-        - xorg-libxau
-        - xorg-libxcomposite
-        - xorg-libxcursor
-        - xorg-libxi
-        - xorg-libxrandr
-        - xorg-libxscrnsaver
-        - xorg-libxtst
-        - xorg-libxdamage
-        - xorg-libxfixes
-        - xorg-libxxf86vm
-        - xorg-libsm
-        - xorg-libice
-        - libxcb
-        - libgl-devel
-        - xorg-xproto
-        - xorg-libx11
-        - xorg-libxext
-        - mesa-dri-drivers
-        - xorg-libxdamage
-        - xorg-libxfixes
-        - xorg-libxxf86vm
-        - libxcb
       run:
         - python
     test:
@@ -118,26 +62,6 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        # TODO: map CDT mesa-libgbm to new X11 package
-        # - { cdt('mesa-libgbm') }
-        # TODO: map CDT mesa-libegl-devel to new X11 package
-        # - { cdt('mesa-libegl-devel') }
-        # TODO: map CDT alsa-lib-devel to new X11 package
-        # - { cdt('alsa-lib-devel') }
-        # TODO: map CDT gtk2-devel to new X11 package
-        # - { cdt('gtk2-devel') }
-        # TODO: map CDT gtkmm24-devel to new X11 package
-        # - { cdt('gtkmm24-devel') }
-        # TODO: map CDT libdrm-devel to new X11 package
-        # - { cdt('libdrm-devel') }
-        # TODO: map CDT pciutils-devel to new X11 package
-        # - { cdt('pciutils-devel') }
-        # TODO: map CDT libselinux-devel to new X11 package
-        # - { cdt('libselinux-devel') }
-        # TODO: map CDT expat-devel to new X11 package
-        # - { cdt('expat-devel') }
-        # TODO: map CDT pcre to new X11 package
-        # - { cdt('pcre') }
         - jom  # [win]
         - make  # [not win]
         - pkg-config
@@ -151,6 +75,13 @@ outputs:
         - qttools {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
+        # X11 dependencies
+        - libgl  # [linux]
+        - libgl-devel  # [linux]
+        - mesa-libgl-devel  # [linux]
+        - mesalib  # [linux]
+        - libegl  # [linux]
+        - libegl-devel  # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -161,50 +92,13 @@ outputs:
         - PyQt{{ version[0] }}
       requires:
         - pip
-        # TODO: map CDT libxrender to new X11 package
-        # - { cdt('libxrender') }
-        # TODO: map CDT mesa-libgl to new X11 package
-        # - { cdt('mesa-libgl') }
-        # TODO: map CDT mesa-libgbm to new X11 package
-        # - { cdt('mesa-libgbm') }
-        # TODO: map CDT mesa-libegl to new X11 package
-        # - { cdt('mesa-libegl') }
-        # TODO: map CDT libxau to new X11 package
-        # - { cdt('libxau') }
-        # TODO: map CDT alsa-lib to new X11 package
-        # - { cdt('alsa-lib') }
-        # TODO: map CDT gtk2 to new X11 package
-        # - { cdt('gtk2') }
-        # TODO: map CDT gtkmm24 to new X11 package
-        # - { cdt('gtkmm24') }
-        # TODO: map CDT libdrm to new X11 package
-        # - { cdt('libdrm') }
-        # TODO: map CDT libxcomposite to new X11 package
-        # - { cdt('libxcomposite') }
-        # TODO: map CDT libxcursor to new X11 package
-        # - { cdt('libxcursor') }
-        # TODO: map CDT libxi to new X11 package
-        # - { cdt('libxi') }
-        # TODO: map CDT libxrandr to new X11 package
-        # - { cdt('libxrandr') }
-        # TODO: map CDT pciutils-devel to new X11 package
-        # - { cdt('pciutils-devel') }
-        # TODO: map CDT libxscrnsaver to new X11 package
-        # - { cdt('libxscrnsaver') }
-        # TODO: map CDT libxtst to new X11 package
-        # - { cdt('libxtst') }
-        # TODO: map CDT libselinux to new X11 package
-        # - { cdt('libselinux') }
-        # TODO: map CDT libsm to new X11 package
-        # - { cdt('libsm') }
-        # TODO: map CDT libice to new X11 package
-        # - { cdt('libice') }
-        # TODO: map CDT expat to new X11 package
-        # - { cdt('expat') }
-        # TODO: map CDT pcre to new X11 package
-        # - { cdt('pcre') }
-        # TODO: map CDT libglvnd to new X11 package
-        # - { cdt('libglvnd') }
+        # X11 dependencies
+        - libgl  # [linux]
+        - libgl-devel  # [linux]
+        - mesa-libgl-devel  # [linux]
+        - mesalib  # [linux]
+        - libegl  # [linux]
+        - libegl-devel  # [linux]
       commands:
         - pip check
   - name: pyqtwebengine
@@ -222,24 +116,13 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        # TODO: map CDT mesa-libegl-devel to new X11 package
-        # - { cdt('mesa-libegl-devel') }
-        # TODO: map CDT alsa-lib-devel to new X11 package
-        # - { cdt('alsa-lib-devel') }
-        # TODO: map CDT gtk2-devel to new X11 package
-        # - { cdt('gtk2-devel') }
-        # TODO: map CDT gtkmm24-devel to new X11 package
-        # - { cdt('gtkmm24-devel') }
-        # TODO: map CDT libdrm-devel to new X11 package
-        # - { cdt('libdrm-devel') }
-        # TODO: map CDT pciutils-devel to new X11 package
-        # - { cdt('pciutils-devel') }
-        # TODO: map CDT libselinux-devel to new X11 package
-        # - { cdt('libselinux-devel') }
-        # TODO: map CDT expat-devel to new X11 package
-        # - { cdt('expat-devel') }
-        # TODO: map CDT pcre to new X11 package
-        # - { cdt('pcre') }
+        # X11 dependencies
+        - libgl  # [linux]
+        - libgl-devel  # [linux]
+        - mesa-libgl-devel  # [linux]
+        - mesalib  # [linux]
+        - libegl  # [linux]
+        - libegl-devel  # [linux]
         - jom  # [win]
         - make  # [not win]
         - pkg-config
@@ -260,48 +143,13 @@ outputs:
         - PyQt{{ version[0] }}
       requires:
         - pip
-        # TODO: map CDT libxrender to new X11 package
-        # - { cdt('libxrender') }
-        # TODO: map CDT mesa-libgl to new X11 package
-        # - { cdt('mesa-libgl') }
-        # TODO: map CDT mesa-libegl to new X11 package
-        # - { cdt('mesa-libegl') }
-        # TODO: map CDT libxau to new X11 package
-        # - { cdt('libxau') }
-        # TODO: map CDT alsa-lib to new X11 package
-        # - { cdt('alsa-lib') }
-        # TODO: map CDT gtk2 to new X11 package
-        # - { cdt('gtk2') }
-        # TODO: map CDT gtkmm24 to new X11 package
-        # - { cdt('gtkmm24') }
-        # TODO: map CDT libdrm to new X11 package
-        # - { cdt('libdrm') }
-        # TODO: map CDT libxcomposite to new X11 package
-        # - { cdt('libxcomposite') }
-        # TODO: map CDT libxcursor to new X11 package
-        # - { cdt('libxcursor') }
-        # TODO: map CDT libxi to new X11 package
-        # - { cdt('libxi') }
-        # TODO: map CDT libxrandr to new X11 package
-        # - { cdt('libxrandr') }
-        # TODO: map CDT pciutils-devel to new X11 package
-        # - { cdt('pciutils-devel') }
-        # TODO: map CDT libxscrnsaver to new X11 package
-        # - { cdt('libxscrnsaver') }
-        # TODO: map CDT libxtst to new X11 package
-        # - { cdt('libxtst') }
-        # TODO: map CDT libselinux to new X11 package
-        # - { cdt('libselinux') }
-        # TODO: map CDT libsm to new X11 package
-        # - { cdt('libsm') }
-        # TODO: map CDT libice to new X11 package
-        # - { cdt('libice') }
-        # TODO: map CDT expat to new X11 package
-        # - { cdt('expat') }
-        # TODO: map CDT pcre to new X11 package
-        # - { cdt('pcre') }
-        # TODO: map CDT libglvnd to new X11 package
-        # - { cdt('libglvnd') }
+        # X11 dependencies
+        - libgl  # [linux]
+        - libgl-devel  # [linux]
+        - mesa-libgl-devel  # [linux]
+        - mesalib  # [linux]
+        - libegl  # [linux]
+        - libegl-devel  # [linux]
       commands:
         - pip check
 
