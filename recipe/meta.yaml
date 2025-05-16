@@ -75,11 +75,6 @@ outputs:
         - qttools {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -112,11 +107,6 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
         - jom  # [win]
         - make  # [not win]
         - pkg-config
@@ -129,6 +119,11 @@ outputs:
         - qtdeclarative {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebengine {{ qt_version }}
+        # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
+        - libgl-devel  # [linux]
+        - libegl-devel  # [linux]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
