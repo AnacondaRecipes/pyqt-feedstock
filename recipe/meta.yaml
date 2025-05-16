@@ -76,11 +76,7 @@ outputs:
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
         # X11 dependencies
-        - libgl  # [linux]
         - libgl-devel  # [linux]
-        - mesa-libgl-devel  # [linux]
-        - mesalib  # [linux]
-        - libegl  # [linux]
         - libegl-devel  # [linux]
       run:
         - python
@@ -93,11 +89,7 @@ outputs:
       requires:
         - pip
         # X11 dependencies
-        - libgl  # [linux]
         - libgl-devel  # [linux]
-        - mesa-libgl-devel  # [linux]
-        - mesalib  # [linux]
-        - libegl  # [linux]
         - libegl-devel  # [linux]
       commands:
         - pip check
@@ -117,11 +109,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         # X11 dependencies
-        - libgl  # [linux]
         - libgl-devel  # [linux]
-        - mesa-libgl-devel  # [linux]
-        - mesalib  # [linux]
-        - libegl  # [linux]
         - libegl-devel  # [linux]
         - jom  # [win]
         - make  # [not win]
@@ -144,11 +132,7 @@ outputs:
       requires:
         - pip
         # X11 dependencies
-        - libgl  # [linux]
         - libgl-devel  # [linux]
-        - mesa-libgl-devel  # [linux]
-        - mesalib  # [linux]
-        - libegl  # [linux]
         - libegl-devel  # [linux]
       commands:
         - pip check
