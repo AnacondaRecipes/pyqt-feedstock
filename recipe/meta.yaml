@@ -1,7 +1,7 @@
 {% set version = "6.7.1" %}
 {% set pyqt_webengine_version = "6.7.0" %}
 {% set pyqt_sip_version = "13.9.1" %}
-{% set pyqt_sip_pkg_name = """PyQt" + version[0] + "-sip""" %}
+{% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
 package:
   name: pyqt-split
