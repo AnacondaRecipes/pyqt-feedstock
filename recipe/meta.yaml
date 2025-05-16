@@ -76,6 +76,8 @@ outputs:
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
         # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
         - libgl-devel  # [linux]
         - libegl-devel  # [linux]
       run:
@@ -89,6 +91,8 @@ outputs:
       requires:
         - pip
         # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
         - libgl-devel  # [linux]
         - libegl-devel  # [linux]
       commands:
@@ -109,6 +113,8 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
         - libgl-devel  # [linux]
         - libegl-devel  # [linux]
         - jom  # [win]
@@ -132,6 +138,8 @@ outputs:
       requires:
         - pip
         # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
         - libgl-devel  # [linux]
         - libegl-devel  # [linux]
       commands:
