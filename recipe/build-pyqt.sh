@@ -20,9 +20,15 @@ if [[ $(uname) == "Linux" ]]; then
     export PATH=${PWD}:${PATH}
 
     SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
+    
+    # Ensure OpenGL libraries are findable
+    export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+    export LIBRARY_PATH=${PREFIX}/lib:${LIBRARY_PATH}
+    export PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}
+
     export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
     export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
-    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS"
+    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS -L${PREFIX}/lib"
 elif [[ $(uname) == "Darwin" ]]; then
     # Use xcode-avoidance scripts
     export PATH=$PREFIX/bin/xc-avoidance:$PATH

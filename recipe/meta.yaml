@@ -65,6 +65,11 @@ outputs:
         - jom  # [win]
         - make  # [not win]
         - pkg-config
+        # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
+        - libgl-devel  # [linux]
+        - libegl-devel  # [linux]
       host:
         - python
         - pyqt-builder >=1.15,<2
