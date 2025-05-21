@@ -5,7 +5,7 @@ build_parameters:
   - "--skip-existing"
 
 channels:
-  - https://staging.continuum.io/prefect/fs/qtbase-feedstock/pr7/b35796f
+  - https://staging.continuum.io/prefect/fs/qtbase-feedstock/pr7/c96e6a6
   - https://staging.continuum.io/prefect/fs/qtsvg-feedstock/pr3/7a7c22b
   - https://staging.continuum.io/prefect/fs/qttools-feedstock/pr3/959e16a
   - https://staging.continuum.io/prefect/fs/qtshadertools-feedstock/pr3/ad82664
