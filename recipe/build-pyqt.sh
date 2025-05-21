@@ -2,6 +2,8 @@ set -exou
 
 # Ensure OpenGL libraries are findable
 export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-}:${PREFIX}/lib/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/lib64/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/share/pkgconfig
+export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH:-}
+export LIBRARY_PATH=${PREFIX}/lib:${LIBRARY_PATH:-}
 
 pushd pyqt
 cp LICENSE ..
