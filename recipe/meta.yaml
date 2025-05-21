@@ -75,6 +75,11 @@ outputs:
         - qttools {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
+        # X11 dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
+        - libgl-devel  # [linux]
+        - libegl-devel  # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
