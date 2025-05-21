@@ -1,7 +1,12 @@
 set -exou
 
+# Ensure OpenGL libraries are findable
+export LD_LIBRARY_PATH=${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64:${BUILD_PREFIX}/${HOST}/sysroot/usr/lib:${LD_LIBRARY_PATH}
+export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-}:${PREFIX}/lib/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/lib64/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/share/pkgconfig
+
 pushd pyqt
 cp LICENSE ..
+
 
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
@@ -21,10 +26,6 @@ if [[ $(uname) == "Linux" ]]; then
 
     SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
     
-    # Ensure OpenGL libraries are findable
-    export LD_LIBRARY_PATH=${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64:${BUILD_PREFIX}/${HOST}/sysroot/usr/lib:${LD_LIBRARY_PATH}
-    export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-}:${PREFIX}/lib/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/lib64/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/share/pkgconfig
-
     export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
     export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
     export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS -L${PREFIX}/lib"
