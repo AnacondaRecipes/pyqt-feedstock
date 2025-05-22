@@ -1,7 +1,13 @@
-set -exou
+set -ex
+
+# Ensure OpenGL libraries are findable
+export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-}:${PREFIX}/lib/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/lib64/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/share/pkgconfig
+export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH:-}
+export LIBRARY_PATH=${PREFIX}/lib:${LIBRARY_PATH:-}
 
 pushd pyqt
 cp LICENSE ..
+
 
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
@@ -20,9 +26,10 @@ if [[ $(uname) == "Linux" ]]; then
     export PATH=${PWD}:${PATH}
 
     SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
+    
     export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
     export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
-    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS"
+    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS -L${PREFIX}/lib"
 elif [[ $(uname) == "Darwin" ]]; then
     # Use xcode-avoidance scripts
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
