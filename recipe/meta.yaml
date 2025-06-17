@@ -45,6 +45,7 @@ outputs:
         - pip
       commands:
         - pip check
+
   - name: pyqt
     version: {{ version }}
     script: build-pyqt.sh  # [not win]
@@ -62,32 +63,38 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - jom  # [win]
-        - make  # [not win]
+        - jom                                # [win]
+        - make                               # [not win]
         - pkg-config
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
       host:
         - python
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
-        - qtbase {{ qt_version }}
-        - qtdeclarative {{ qt_version }}
-        - qtsvg {{ qt_version }}
-        - qttools {{ qt_version }}
-        - qtwebchannel {{ qt_version }}
-        - qtwebsockets {{ qt_version }}
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
+        - qtbase-devel {{ qt }}
+        - qtdeclarative {{ qt }}
+        - qtsvg {{ qt }}
+        - qttools {{ qt }}
+        - qtwebchannel {{ qt }}
+        - qtwebsockets {{ qt }}
+        # OpenGL and X11 dependencies
+        - libgl-devel {{ libgl }}   # [linux]
+        - libegl-devel {{ libegl}}  # [linux]
+        - libglx-devel {{ libglx }} # [linux]
+        - mesalib-devel {{ mesalib }} # [linux]
+        - libxcb-devel {{ libxcb }} # [linux]
+        - xorg-libx11-devel {{ xorg_libx11 }} # [linux]
+        - xorg-libxext-devel {{ xorg_libxext }} # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
+        # Runtime OpenGL dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
+        - libglx  # [linux]
+        - mesalib  # [linux]
+        - libxcb  # [linux]
+        - xorg-libx11  # [linux]
+        - xorg-libxext  # [linux]
     test:
       files:
         - pyqt_test.py
@@ -98,10 +105,14 @@ outputs:
         # X11 dependencies
         - libgl  # [linux]
         - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
+        - libglx  # [linux]
+        - mesalib  # [linux]
+        - libxcb  # [linux]
+        - xorg-libx11  # [linux]
+        - xorg-libxext  # [linux]
       commands:
         - pip check
+
   - name: pyqtwebengine
     version: {{ pyqt_webengine_version }}
     script: build-pyqtwebengine.sh  # [not win]
@@ -125,18 +136,29 @@ outputs:
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
-        - qtbase {{ qt_version }}
-        - qtdeclarative {{ qt_version }}
-        - qtwebchannel {{ qt_version }}
-        - qtwebengine {{ qt_version }}
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
+        - qtbase-devel {{ qt }}
+        - qtdeclarative {{ qt }}
+        - qtwebchannel {{ qt }}
+        - qtwebengine {{ qt }}
+        # OpenGL and X11 dependencies
+        - libgl-devel {{ libgl }}               # [linux]
+        - libegl-devel {{ libegl}}              # [linux]
+        - libglx-devel {{ libglx }}             # [linux]
+        - mesalib-devel {{ mesalib }}           # [linux]
+        - libxcb-devel {{ libxcb }}             # [linux]
+        - xorg-libx11-devel {{ xorg_libx11 }}   # [linux]
+        - xorg-libxext-devel {{ xorg_libxext }} # [linux]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
+        # Runtime OpenGL dependencies
+        - libgl  # [linux]
+        - libegl  # [linux]
+        - libglx  # [linux]
+        - mesalib  # [linux]
+        - libxcb  # [linux]
+        - xorg-libx11  # [linux]
+        - xorg-libxext  # [linux]
     test:
       imports:
         - PyQt{{ version[0] }}
@@ -145,8 +167,11 @@ outputs:
         # X11 dependencies
         - libgl  # [linux]
         - libegl  # [linux]
-        - libgl-devel  # [linux]
-        - libegl-devel  # [linux]
+        - libglx  # [linux]
+        - mesalib  # [linux]
+        - libxcb  # [linux]
+        - xorg-libx11  # [linux]
+        - xorg-libxext  # [linux]
       commands:
         - pip check
 

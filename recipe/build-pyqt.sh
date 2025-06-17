@@ -1,3 +1,4 @@
+#!/bin/bash
 set -ex
 
 # Ensure OpenGL libraries are findable
@@ -7,7 +8,6 @@ export LIBRARY_PATH=${PREFIX}/lib:${LIBRARY_PATH:-}
 
 pushd pyqt
 cp LICENSE ..
-
 
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
@@ -25,14 +25,24 @@ if [[ $(uname) == "Linux" ]]; then
     chmod +x g++ gcc gcc-ar
     export PATH=${PWD}:${PATH}
 
+    # Add sysroot paths for OpenGL and X11
     SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
+    SYSROOT_INCLUDES="-I ${BUILD_PREFIX}/${HOST}/sysroot/usr/include"
     
-    export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
-    export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
+    export CFLAGS="$SYSROOT_FLAGS $SYSROOT_INCLUDES $CFLAGS"
+    export CXXFLAGS="$SYSROOT_FLAGS $SYSROOT_INCLUDES $CXXFLAGS"
     export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS -L${PREFIX}/lib"
+
+    # Ensure OpenGL headers are found
+    export CPATH="${PREFIX}/include:${BUILD_PREFIX}/${HOST}/sysroot/usr/include:${CPATH:-}"
 elif [[ $(uname) == "Darwin" ]]; then
     # Use xcode-avoidance scripts
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
+    
+    # macOS OpenGL framework paths
+    export CFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers $CFLAGS"
+    export CXXFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers $CXXFLAGS"
+    export LDFLAGS="-framework OpenGL $LDFLAGS"
 fi
 
 # Ensure qmake is found.
