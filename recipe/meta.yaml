@@ -3,6 +3,10 @@
 {% set pyqt_sip_version = "13.9.1" %}
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
+# The version of Qt packages being built against must match because sip detects the version for some things in qt-main
+# and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
+{% set qt_version = "6.7.3" %}
+
 package:
   name: pyqt-split
   version: {{ version }}
@@ -11,23 +15,25 @@ source:
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/PyQt{{ version[0] }}-{{ version }}.tar.gz
     sha256: 3672a82ccd3a62e99ab200a13903421e2928e399fda25ced98d140313ad59cb9
     folder: pyqt
+
   - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
     sha256: 15be741d1ae8c82bb7afe9a61f3cf8c50457f7d61229a1c39c24cd6e8f4d86dc
     folder: pyqt_sip
+
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
     sha256: 68edc7adb6d9e275f5de956881e79cca0d71fad439abeaa10d823bff5ac55001
     folder: pyqt_webengine
 
 build:
   number: 2
-  skip: true  # [py<38]
-  skip: true  # [osx and x86_64]
+  skip: True  # [py<38]
+  skip: True  # [osx and x86_64]
 
 outputs:
   - name: {{ pyqt_sip_pkg_name | lower }}
     version: {{ pyqt_sip_version }}
     script: build-pyqt-sip.sh  # [not win]
-    script: bld-pyqt-sip.bat  # [win]
+    script: bld-pyqt-sip.bat   # [win]
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -39,12 +45,9 @@ outputs:
         - pip
       run:
         - python
-        - sip
-        - packaging
-        - toml
     test:
       imports:
-        - PyQt{{ version[0] }}.sip
+        - PyQt6.sip
       requires:
         - pip
       commands:
@@ -53,10 +56,11 @@ outputs:
   - name: pyqt
     version: {{ version }}
     script: build-pyqt.sh  # [not win]
-    script: bld-pyqt.bat  # [win]
+    script: bld-pyqt.bat   # [win]
     build:
       entry_points:
-        - pyuic{{ version[0] }} = PyQt{{ version[0] }}.uic.pyuic:main
+        - pylupdate6 = PyQt6.lupdate.pylupdate:main
+        - pyuic6 = PyQt6.uic.pyuic:main
       run_exports:
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
       missing_dso_whitelist:
@@ -68,19 +72,21 @@ outputs:
         - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - jom                                # [win]
-        - make                               # [not win]
+        - jom                             # [win]
+        - make                            # [not win]
         - pkg-config
       host:
         - python
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
-        - qtbase-devel {{ qt }}
+        - qtbase-devel {{ qt_version }}
+        - qtdeclarative {{ qt_version }}
+        - qtsvg {{ qt_version }}
+        - qttools {{ qt_version }}
+        - qtwebchannel {{ qt_version }}
+        - qtwebsockets {{ qt_version }}
         # OpenGL and X11 dependencies
         - libgl-devel {{ libgl }}         # [linux]
-        - libegl-devel {{ libegl}}        # [linux]
-        - libopengl-devel {{ libopengl }} # [linux]
-        - libdrm {{ libdrm }}             # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -89,21 +95,21 @@ outputs:
         - pyqt_test.py
       imports:
         - PyQt6
-        - PyQt6.sip
         - PyQt6.QtCore
+        - PyQt6.QtDBus
+        - PyQt6.QtDesigner
         - PyQt6.QtGui
         - PyQt6.QtHelp
-        # - PyQt6.QtMultimedia # Made add-on in Qt6?
-        # - PyQt6.QtMultimediaWidgets # Made add-on in Qt6?
         - PyQt6.QtNetwork
         - PyQt6.QtOpenGL
-        - PyQt6.QtOpenGLWidgets # New in Qt6?
+        - PyQt6.QtOpenGLWidgets
         - PyQt6.QtPrintSupport
         - PyQt6.QtQml
         - PyQt6.QtQuick
-        - PyQt6.QtQuickWidgets # New in Qt6?
+        - PyQt6.QtQuickWidgets
+        - PyQt6.QtSql
         - PyQt6.QtSvg
-        - PyQt6.QtSvgWidgets # New in Qt6?
+        - PyQt6.QtSvgWidgets
         - PyQt6.QtTest
         - PyQt6.QtWebChannel
         - PyQt6.QtWebSockets
@@ -111,21 +117,13 @@ outputs:
         - PyQt6.QtXml
       requires:
         - pip
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libglx  # [linux]
-        - mesalib  # [linux]
-        - libxcb  # [linux]
-        - xorg-libx11  # [linux]
-        - xorg-libxext  # [linux]
       commands:
         - pip check
 
   - name: pyqtwebengine
     version: {{ pyqt_webengine_version }}
     script: build-pyqtwebengine.sh  # [not win]
-    script: bld-pyqtwebengine.bat  # [win]
+    script: bld-pyqtwebengine.bat   # [win]
     build:
       run_exports:
         - {{ pin_subpackage('pyqtwebengine', max_pin='x.x') }}
@@ -138,7 +136,7 @@ outputs:
         - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - jom  # [win]
+        - jom   # [win]
         - make  # [not win]
         - pkg-config
       host:
@@ -146,30 +144,20 @@ outputs:
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
-        - qtbase-devel {{ qt }}
-        - qtdeclarative {{ qt }}
-        - qtwebchannel {{ qt }}
-        - qtwebengine {{ qt }}
-        # OpenGL and X11 dependencies
-        - libgl-devel {{ libgl }}               # [linux]
-        - libegl-devel {{ libegl}}              # [linux]
-        - libopengl-devel {{ libopengl }} # [linux]
+        - qtbase-devel {{ qt_version }}
+        - qtdeclarative {{ qt_version }}
+        - qtwebchannel {{ qt_version }}
+        - qtwebengine {{ qt_version }}
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
     test:
       imports:
-        - PyQt{{ version[0] }}
+        - PyQt6.QtWebEngineCore
+        - PyQt6.QtWebEngineQuick
+        - PyQt6.QtWebEngineWidgets
       requires:
         - pip
-        # X11 dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libglx  # [linux]
-        - mesalib  # [linux]
-        - libxcb  # [linux]
-        - xorg-libx11  # [linux]
-        - xorg-libxext  # [linux]
       commands:
         - pip check
 

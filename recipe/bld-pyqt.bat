@@ -2,7 +2,6 @@ echo on
 
 pushd pyqt
 copy LICENSE ..
-copy %LIBRARY_BIN%\qmake6.exe %LIBRARY_BIN%\qmake.exe
 
 set PATH=%cd%\jom;%PATH%
 set PATH=%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%
@@ -10,6 +9,7 @@ set PATH=%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%
 call sip-build ^
     --verbose ^
     --confirm-license ^
+    --qmake=%LIBRARY_BIN%\qmake6.exe ^
     --disable QtNfc ^
     --no-dbus-python ^
     --target-dir %SP_DIR% ^

@@ -1,13 +1,10 @@
 #!/bin/bash
 set -ex
 
-# Ensure OpenGL libraries are findable
-export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-}:${PREFIX}/lib/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/lib64/pkgconfig:$BUILD_PREFIX/$BUILD/sysroot/usr/share/pkgconfig
-export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH:-}
-export LIBRARY_PATH=${PREFIX}/lib:${LIBRARY_PATH:-}
-
 pushd pyqt
 cp LICENSE ..
+
+export SIP_ARGS=""
 
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
@@ -25,32 +22,23 @@ if [[ $(uname) == "Linux" ]]; then
     chmod +x g++ gcc gcc-ar
     export PATH=${PWD}:${PATH}
 
-    # Add sysroot paths for OpenGL and X11
-    SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
-    SYSROOT_INCLUDES="-I ${BUILD_PREFIX}/${HOST}/sysroot/usr/include"
-    
-    export CFLAGS="$SYSROOT_FLAGS $SYSROOT_INCLUDES $CFLAGS"
-    export CXXFLAGS="$SYSROOT_FLAGS $SYSROOT_INCLUDES $CXXFLAGS"
-    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS -L${PREFIX}/lib"
-
-    # Ensure OpenGL headers are found
-    export CPATH="${PREFIX}/include:${BUILD_PREFIX}/${HOST}/sysroot/usr/include:${CPATH:-}"
+    # TODO: Add --c_stdlib_version=${c_stdlib_version} once sip is updated.
+    export SIP_ARGS="
+      --qmake-setting QMAKE_LIBDIR=${PREFIX}/lib
+      --qmake-setting QMAKE_INCDIR_OPENGL=${PREFIX}/include
+    "
 elif [[ $(uname) == "Darwin" ]]; then
     # Use xcode-avoidance scripts
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
-    
-    # macOS OpenGL framework paths
-    export CFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers $CFLAGS"
-    export CXXFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers $CXXFLAGS"
-    export LDFLAGS="-framework OpenGL $LDFLAGS"
+
+    # TODO: Add --minimum_macos_version=${c_stdlib_version} once sip is updated.
+    export SIP_ARGS="
+      --qmake-setting QMAKE_MAC_SDK=macosx${OSX_SDK_VER}
+    "
 fi
 
-ln -s ${PREFIX}/bin/qmake6 ${PREFIX}/bin/qmake
-
-# Ensure qmake is found.
-export PATH=${PREFIX}/lib/qt6/bin:${PATH}
-
-sip-build \
+sip-build ${SIP_ARGS} \
+--qmake=${PREFIX}/bin/qmake6 \
 --verbose \
 --confirm-license \
 --no-make
