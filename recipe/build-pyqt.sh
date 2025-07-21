@@ -45,6 +45,8 @@ elif [[ $(uname) == "Darwin" ]]; then
     export LDFLAGS="-framework OpenGL $LDFLAGS"
 fi
 
+ln -s ${PREFIX}/bin/qmake6 ${PREFIX}/bin/qmake
+
 # Ensure qmake is found.
 export PATH=${PREFIX}/lib/qt6/bin:${PATH}
 

@@ -39,6 +39,9 @@ outputs:
         - pip
       run:
         - python
+        - sip
+        - packaging
+        - toml
     test:
       imports:
         - PyQt{{ version[0] }}.sip
@@ -73,35 +76,39 @@ outputs:
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
         - qtbase-devel {{ qt }}
-        - qtdeclarative {{ qt }}
-        - qtsvg {{ qt }}
-        - qttools {{ qt }}
-        - qtwebchannel {{ qt }}
-        - qtwebsockets {{ qt }}
         # OpenGL and X11 dependencies
-        - libgl-devel {{ libgl }}   # [linux]
-        - libegl-devel {{ libegl}}  # [linux]
-        - libglx-devel {{ libglx }} # [linux]
-        - mesalib {{ mesalib }}              # [linux]
-        - libxcb {{ libxcb }} # [linux]
-        - xorg-libx11 {{ xorg_libx11 }} # [linux]
-        - xorg-libxext {{ xorg_libxext }} # [linux]
+        - libgl-devel {{ libgl }}         # [linux]
+        - libegl-devel {{ libegl}}        # [linux]
+        - libopengl-devel {{ libopengl }} # [linux]
+        - libdrm {{ libdrm }}             # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
-        # Runtime OpenGL dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libglx  # [linux]
-        - mesalib  # [linux]
-        - libxcb  # [linux]
-        - xorg-libx11  # [linux]
-        - xorg-libxext  # [linux]
     test:
       files:
         - pyqt_test.py
       imports:
-        - PyQt{{ version[0] }}
+        - PyQt6
+        - PyQt6.sip
+        - PyQt6.QtCore
+        - PyQt6.QtGui
+        - PyQt6.QtHelp
+        # - PyQt6.QtMultimedia # Made add-on in Qt6?
+        # - PyQt6.QtMultimediaWidgets # Made add-on in Qt6?
+        - PyQt6.QtNetwork
+        - PyQt6.QtOpenGL
+        - PyQt6.QtOpenGLWidgets # New in Qt6?
+        - PyQt6.QtPrintSupport
+        - PyQt6.QtQml
+        - PyQt6.QtQuick
+        - PyQt6.QtQuickWidgets # New in Qt6?
+        - PyQt6.QtSvg
+        - PyQt6.QtSvgWidgets # New in Qt6?
+        - PyQt6.QtTest
+        - PyQt6.QtWebChannel
+        - PyQt6.QtWebSockets
+        - PyQt6.QtWidgets
+        - PyQt6.QtXml
       requires:
         - pip
         # X11 dependencies
@@ -146,22 +153,10 @@ outputs:
         # OpenGL and X11 dependencies
         - libgl-devel {{ libgl }}               # [linux]
         - libegl-devel {{ libegl}}              # [linux]
-        - libglx-devel {{ libglx }}             # [linux]
-        - mesalib {{ mesalib }}                          # [linux]
-        - libxcb {{ libxcb }}             # [linux]
-        - xorg-libx11 {{ xorg_libx11 }}   # [linux]
-        - xorg-libxext {{ xorg_libxext }} # [linux]
+        - libopengl-devel {{ libopengl }} # [linux]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
-        # Runtime OpenGL dependencies
-        - libgl  # [linux]
-        - libegl  # [linux]
-        - libglx  # [linux]
-        - mesalib  # [linux]
-        - libxcb  # [linux]
-        - xorg-libx11  # [linux]
-        - xorg-libxext  # [linux]
     test:
       imports:
         - PyQt{{ version[0] }}
