@@ -5,11 +5,4 @@ build_parameters:
   - "--skip-existing"
 
 channels:
-  - https://staging.continuum.io/prefect/fs/qtbase-feedstock/pr7/01c13ff
-  - https://staging.continuum.io/prefect/fs/qtsvg-feedstock/pr3/ca0b71a
-  - https://staging.continuum.io/prefect/fs/qtshadertools-feedstock/pr3/88c9288
-  - https://staging.continuum.io/prefect/fs/qtdeclarative-feedstock/pr3/80cb92c
-  - https://staging.continuum.io/prefect/fs/qttools-feedstock/pr3/36291ea
-  - https://staging.continuum.io/prefect/fs/qtwebchannel-feedstock/pr3/adb7750
-  - https://staging.continuum.io/prefect/fs/qtwebsockets-feedstock/pr3/433703f
-  - https://staging.continuum.io/prefect/fs/qtwebengine-feedstock/pr4/69abfb0
+  - https://staging.continuum.io/prefect/fs/qtwebengine-feedstock/pr4/a305cd4

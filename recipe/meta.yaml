@@ -30,6 +30,7 @@ outputs:
     script: bld-pyqt-sip.bat  # [win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
       host:
         - python
@@ -61,6 +62,7 @@ outputs:
         - $RPATH/libc.so.6
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - jom                                # [win]
@@ -80,7 +82,7 @@ outputs:
         - libgl-devel {{ libgl }}   # [linux]
         - libegl-devel {{ libegl}}  # [linux]
         - libglx-devel {{ libglx }} # [linux]
-        - mesalib 25.1              # [linux]
+        - mesalib {{ mesalib }}              # [linux]
         - libxcb-devel {{ libxcb }} # [linux]
         - xorg-libx11-devel {{ xorg_libx11 }} # [linux]
         - xorg-libxext-devel {{ xorg_libxext }} # [linux]
@@ -126,6 +128,7 @@ outputs:
         - $RPATH/libc.so.6
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - jom  # [win]
@@ -144,7 +147,7 @@ outputs:
         - libgl-devel {{ libgl }}               # [linux]
         - libegl-devel {{ libegl}}              # [linux]
         - libglx-devel {{ libglx }}             # [linux]
-        - mesalib 25.1                          # [linux]
+        - mesalib {{ mesalib }}                          # [linux]
         - libxcb-devel {{ libxcb }}             # [linux]
         - xorg-libx11-devel {{ xorg_libx11 }}   # [linux]
         - xorg-libxext-devel {{ xorg_libxext }} # [linux]
