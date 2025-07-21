@@ -83,9 +83,9 @@ outputs:
         - libegl-devel {{ libegl}}  # [linux]
         - libglx-devel {{ libglx }} # [linux]
         - mesalib {{ mesalib }}              # [linux]
-        - libxcb-devel {{ libxcb }} # [linux]
-        - xorg-libx11-devel {{ xorg_libx11 }} # [linux]
-        - xorg-libxext-devel {{ xorg_libxext }} # [linux]
+        - libxcb {{ libxcb }} # [linux]
+        - xorg-libx11 {{ xorg_libx11 }} # [linux]
+        - xorg-libxext {{ xorg_libxext }} # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -148,9 +148,9 @@ outputs:
         - libegl-devel {{ libegl}}              # [linux]
         - libglx-devel {{ libglx }}             # [linux]
         - mesalib {{ mesalib }}                          # [linux]
-        - libxcb-devel {{ libxcb }}             # [linux]
-        - xorg-libx11-devel {{ xorg_libx11 }}   # [linux]
-        - xorg-libxext-devel {{ xorg_libxext }} # [linux]
+        - libxcb {{ libxcb }}             # [linux]
+        - xorg-libx11 {{ xorg_libx11 }}   # [linux]
+        - xorg-libxext {{ xorg_libxext }} # [linux]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
