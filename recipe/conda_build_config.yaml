@@ -7,7 +7,7 @@ c_stdlib_version:  # [not linux]
   - 11.1           # [osx]
   - 2019.11        # [win]
 OSX_SDK_VER:
-  - 13.3
+  - 11.3
 
 # https://doc.qt.io/qt-6/windows.html
 c_compiler:    # [win]
@@ -25,4 +25,4 @@ cxx_compiler_version:  # [osx]
 # Have to leave this for now or else the overlinking checks fail when we revert back to the aggregate CBC and use the
 # 11.1 sysroot.
 CONDA_BUILD_SYSROOT:
-  - /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk  # [osx and arm64]
+  - /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk  # [osx and arm64]

@@ -148,6 +148,8 @@ outputs:
         - qtdeclarative {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebengine {{ qt_version }}
+        # OpenGL and X11 dependencies
+        - libgl-devel {{ libgl }}         # [linux]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
