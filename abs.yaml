@@ -5,4 +5,4 @@ build_parameters:
   - "--skip-existing"
 
 channels:
-  - https://staging.continuum.io/prefect/fs/qtwebengine-feedstock/pr4/a305cd4
+  - https://staging.continuum.io/prefect/fs/qtwebengine-feedstock/pr4/3c24916
