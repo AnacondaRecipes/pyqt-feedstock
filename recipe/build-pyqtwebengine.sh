@@ -2,6 +2,8 @@ set -exou
 
 pushd pyqt_webengine
 
+export SIP_ARGS=""
+
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
     echo USED_BUILD_PREFIX=${BUILD_PREFIX}
@@ -18,21 +20,26 @@ if [[ $(uname) == "Linux" ]]; then
     chmod +x g++ gcc gcc-ar
     export PATH=${PWD}:${PATH}
 
-    SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
-    export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
-    export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
-    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS"
-fi
-
-if [[ $(uname) == "Darwin" ]]; then
+    # TODO: Add --c_stdlib_version=${c_stdlib_version} once sip is updated.
+    export SIP_ARGS="
+      --qmake-setting QMAKE_LIBDIR=${PREFIX}/lib
+      --qmake-setting QMAKE_INCDIR_OPENGL=${PREFIX}/include
+    "
+elif [[ $(uname) == "Darwin" ]]; then
     # Use xcode-avoidance scripts
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
+
+    # TODO: Add --minimum_macos_version=${c_stdlib_version} once sip is updated.
+    export SIP_ARGS="
+      --qmake-setting QMAKE_MAC_SDK=macosx${OSX_SDK_VER}
+    "
 fi
 
 # Ensure qmake is found.
 export PATH=${PREFIX}/lib/qt6/bin:${PATH}
 
-sip-build \
+sip-build ${SIP_ARGS} \
+--qmake=${PREFIX}/bin/qmake6 \
 --verbose \
 --no-make
 

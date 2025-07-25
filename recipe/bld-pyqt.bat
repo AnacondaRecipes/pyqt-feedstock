@@ -9,6 +9,7 @@ set PATH=%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%
 call sip-build ^
     --verbose ^
     --confirm-license ^
+    --qmake=%LIBRARY_BIN%\qmake6.exe ^
     --disable QtNfc ^
     --no-dbus-python ^
     --target-dir %SP_DIR% ^

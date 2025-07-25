@@ -1,28 +1,31 @@
 {% set version = "6.7.1" %}
 {% set pyqt_webengine_version = "6.7.0" %}
 {% set pyqt_sip_version = "13.9.1" %}
-
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
+
+# The version of Qt packages being built against must match because sip detects the version for some things in qt-main
+# and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
+{% set qt_version = "6.7.3" %}
 
 package:
   name: pyqt-split
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/P/PyQt{{ version[0] }}/PyQt{{ version[0] }}-{{ version }}.tar.gz
+  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/PyQt{{ version[0] }}-{{ version }}.tar.gz
     sha256: 3672a82ccd3a62e99ab200a13903421e2928e399fda25ced98d140313ad59cb9
     folder: pyqt
 
-  - url: https://pypi.io/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
+  - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
     sha256: 15be741d1ae8c82bb7afe9a61f3cf8c50457f7d61229a1c39c24cd6e8f4d86dc
     folder: pyqt_sip
 
-  - url: https://pypi.io/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
+  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
     sha256: 68edc7adb6d9e275f5de956881e79cca0d71fad439abeaa10d823bff5ac55001
     folder: pyqt_webengine
 
 build:
-  number: 1
+  number: 2
   skip: True  # [py<38]
   skip: True  # [osx and x86_64]
 
@@ -33,6 +36,7 @@ outputs:
     script: bld-pyqt-sip.bat   # [win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
       host:
         - python
@@ -43,7 +47,7 @@ outputs:
         - python
     test:
       imports:
-        - PyQt{{ version[0] }}.sip
+        - PyQt6.sip
       requires:
         - pip
       commands:
@@ -55,7 +59,8 @@ outputs:
     script: bld-pyqt.bat   # [win]
     build:
       entry_points:
-        - pyuic{{ version[0] }} = PyQt{{ version[0] }}.uic.pyuic:main
+        - pylupdate6 = PyQt6.lupdate.pylupdate:main
+        - pyuic6 = PyQt6.uic.pyuic:main
       run_exports:
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
       missing_dso_whitelist:
@@ -64,51 +69,24 @@ outputs:
         - $RPATH/libc.so.6
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libgbm') }}           # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('expat-devel') }}           # [linux and x86_64]
-        - {{ cdt('pcre') }}                  # [linux and aarch64]
-        - {{ cdt('libglvnd-devel') }}        # [linux and aarch64]
-        - jom                                # [win]
-        - make                               # [not win]
+        - jom                             # [win]
+        - make                            # [not win]
         - pkg-config
       host:
         - python
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
-        - qtbase {{ qt_version }}
+        - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtsvg {{ qt_version }}
         - qttools {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
+        # OpenGL and X11 dependencies
+        - libgl-devel {{ libgl }}         # [linux]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -116,39 +94,29 @@ outputs:
       files:
         - pyqt_test.py
       imports:
-        - PyQt{{ version[0] }}
+        - PyQt6
+        - PyQt6.QtCore
+        - PyQt6.QtDBus
+        - PyQt6.QtDesigner
+        - PyQt6.QtGui
+        - PyQt6.QtHelp
+        - PyQt6.QtNetwork
+        - PyQt6.QtOpenGL
+        - PyQt6.QtOpenGLWidgets
+        - PyQt6.QtPrintSupport
+        - PyQt6.QtQml
+        - PyQt6.QtQuick
+        - PyQt6.QtQuickWidgets
+        - PyQt6.QtSql
+        - PyQt6.QtSvg
+        - PyQt6.QtSvgWidgets
+        - PyQt6.QtTest
+        - PyQt6.QtWebChannel
+        - PyQt6.QtWebSockets
+        - PyQt6.QtWidgets
+        - PyQt6.QtXml
       requires:
         - pip
-        - {{ cdt('xorg-x11-proto-devel') }}        # [linux]
-        - {{ cdt('libx11-devel') }}                # [linux]
-        - {{ cdt('libxext') }}               # [linux]
-        - {{ cdt('libxrender') }}            # [linux]
-        - {{ cdt('mesa-libgl') }}            # [linux]
-        - {{ cdt('mesa-libgbm') }}           # [linux]
-        - {{ cdt('mesa-libegl') }}           # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau') }}                # [linux]
-        - {{ cdt('alsa-lib') }}              # [linux]
-        - {{ cdt('gtk2') }}                  # [linux]
-        - {{ cdt('gtkmm24') }}               # [linux]
-        - {{ cdt('libdrm') }}                # [linux]
-        - {{ cdt('libxcomposite') }}         # [linux]
-        - {{ cdt('libxcursor') }}            # [linux]
-        - {{ cdt('libxi') }}                 # [linux]
-        - {{ cdt('libxrandr') }}             # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver') }}         # [linux]
-        - {{ cdt('libxtst') }}               # [linux]
-        - {{ cdt('libselinux') }}            # [linux]
-        - {{ cdt('libxdamage') }}            # [linux]
-        - {{ cdt('libxfixes') }}             # [linux]
-        - {{ cdt('libxxf86vm') }}            # [linux]
-        - {{ cdt('libsm') }}                 # [linux]
-        - {{ cdt('libice') }}                # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('expat') }}                 # [linux and x86_64]
-        - {{ cdt('pcre') }}                  # [linux and aarch64]
-        - {{ cdt('libglvnd') }}              # [linux and aarch64]
       commands:
         - pip check
 
@@ -165,86 +133,33 @@ outputs:
         - $RPATH/libc.so.6
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('expat-devel') }}           # [linux and x86_64]
-        - {{ cdt('pcre') }}                  # [linux and aarch64]
-        - {{ cdt('libglvnd-devel') }}        # [linux and aarch64]
-        - jom                                # [win]
-        - make                               # [not win]
+        - jom   # [win]
+        - make  # [not win]
         - pkg-config
       host:
         - python
         - pyqt-builder >=1.15,<2
         - sip >=6.8.6,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
-        - qtbase {{ qt_version }}
+        - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebengine {{ qt_version }}
+        # OpenGL and X11 dependencies
+        - libgl-devel {{ libgl }}         # [linux]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
     test:
       imports:
-        - PyQt{{ version[0] }}
+        - PyQt6.QtWebEngineCore
+        - PyQt6.QtWebEngineQuick
+        - PyQt6.QtWebEngineWidgets
       requires:
         - pip
-        - {{ cdt('xorg-x11-proto-devel') }}    # [linux]
-        - {{ cdt('libx11-devel') }}            # [linux]
-        - {{ cdt('libxext') }}           # [linux]
-        - {{ cdt('libxrender') }}        # [linux]
-        - {{ cdt('mesa-libgl') }}        # [linux]
-        - {{ cdt('mesa-libegl') }}       # [linux]
-        - {{ cdt('mesa-dri-drivers') }}  # [linux]
-        - {{ cdt('libxau') }}            # [linux]
-        - {{ cdt('alsa-lib') }}          # [linux]
-        - {{ cdt('gtk2') }}              # [linux]
-        - {{ cdt('gtkmm24') }}           # [linux]
-        - {{ cdt('libdrm') }}            # [linux]
-        - {{ cdt('libxcomposite') }}     # [linux]
-        - {{ cdt('libxcursor') }}        # [linux]
-        - {{ cdt('libxi') }}             # [linux]
-        - {{ cdt('libxrandr') }}         # [linux]
-        - {{ cdt('pciutils-devel') }}    # [linux]
-        - {{ cdt('libxscrnsaver') }}     # [linux]
-        - {{ cdt('libxtst') }}           # [linux]
-        - {{ cdt('libselinux') }}        # [linux]
-        - {{ cdt('libxdamage') }}        # [linux]
-        - {{ cdt('libxfixes') }}         # [linux]
-        - {{ cdt('libxxf86vm') }}        # [linux]
-        - {{ cdt('libsm') }}             # [linux]
-        - {{ cdt('libice') }}            # [linux]
-        - {{ cdt('libxcb') }}            # [linux]
-        - {{ cdt('expat') }}             # [linux and x86_64]
-        - {{ cdt('pcre') }}              # [linux and aarch64]
-        - {{ cdt('libglvnd') }}          # [linux and aarch64]
       commands:
         - pip check
 
@@ -277,4 +192,3 @@ extra:
     - ocefpaf
     - jschueller
   feedstock-name: pyqt
-

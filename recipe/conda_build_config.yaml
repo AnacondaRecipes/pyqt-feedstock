@@ -1,4 +1,28 @@
-# The version of Qt packages being built against must match because sip detects the version for some things in qt-main
-# and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
-qt_version:
-  - 6.7.3
+# Qt 6.7 builds with XCode 11 and macOS 13 SDK but supports a minimum macOS version of 11. This requires matching
+# compiler versions as well for something around the same version that originally shipped with XCode 14. For us,
+# that is clang 14.
+
+# https://doc.qt.io/archives/qt-6.7/macos.html
+c_stdlib_version:  # [not linux]
+  - 11.1           # [osx]
+  - 2019.11        # [win]
+OSX_SDK_VER:
+  - 11.3
+
+# https://doc.qt.io/qt-6/windows.html
+c_compiler:    # [win]
+  - vs2019     # [win]
+cxx_compiler:  # [win]
+  - vs2019     # [win]
+
+# XCode 15.0 came with SDK 14.0 and clang 15
+# https://en.wikipedia.org/wiki/Xcode
+c_compiler_version:    # [osx]
+  - 14                 # [osx]
+cxx_compiler_version:  # [osx]
+  - 14                 # [osx]
+
+# Have to leave this for now or else the overlinking checks fail when we revert back to the aggregate CBC and use the
+# 11.1 sysroot.
+CONDA_BUILD_SYSROOT:
+  - /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk  # [osx and arm64]

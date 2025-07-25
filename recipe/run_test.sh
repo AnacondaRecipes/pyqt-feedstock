@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/bin/bash
 
 if [[ "${target_platform}" == linux-* ]]; then
   # Hack to help QtWebEngine find alsalib at module import time. We can't add ${BUILD_PREFIX}/${HOST}/sysroot/lib64 to
@@ -8,12 +8,22 @@ if [[ "${target_platform}" == linux-* ]]; then
   # Add runtime path of libEGL.so.1 so Qt libraries can find it as they're loaded in.
   # This must be done before the python interpreter starts up.
   export LD_LIBRARY_PATH="${PREFIX}/${BUILD/conda_cos7/conda}/sysroot/usr/lib64:${LD_LIBRARY_PATH}"
+
+  # Ensure OpenGL libraries are findable at runtime
+  export LD_LIBRARY_PATH="${PREFIX}/lib:${LD_LIBRARY_PATH}"
+  export LIBRARY_PATH="${PREFIX}/lib:${LIBRARY_PATH}"
 fi
 
 if [[ "${PKG_NAME}" == pyqt ]]; then
   ${PYTHON} ${RECIPE_DIR}/check_imports_pyqt.py
 
   test -f ${PREFIX}/bin/pyuic6 || (echo "FATAL: Failed to find pyuic6" && exit 1)
+
+  # Test OpenGL functionality
+  if [[ "${target_platform}" == linux-* ]]; then
+    # Check if OpenGL is available
+    ${PYTHON} -c "from PyQt6.QtOpenGL import QOpenGLWidget; print('OpenGL support is available')" || echo "Warning: OpenGL support may not be available"
+  fi
 
   # we don't have xvfb on our builders ... so we might ignore it ..
   DISPLAY=localhost:1.0 xvfb-run -a bash -c 'python pyqt_test.py' || true
