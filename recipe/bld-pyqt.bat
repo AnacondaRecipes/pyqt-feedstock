@@ -3,8 +3,7 @@ echo on
 pushd pyqt
 copy LICENSE ..
 
-set PATH=%cd%\jom;%PATH%
-set PATH=%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%
+set "PATH=%cd%\jom;%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%"
 
 call sip-build ^
     --verbose ^

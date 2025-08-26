@@ -1,33 +1,32 @@
-{% set version = "6.7.1" %}
-{% set pyqt_webengine_version = "6.7.0" %}
-{% set pyqt_sip_version = "13.9.1" %}
+{% set version = "6.9.1" %}
+{% set pyqt_webengine_version = "6.9.0" %}
+{% set pyqt_sip_version = "13.10.2" %}
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
 # The version of Qt packages being built against must match because sip detects the version for some things in qt-main
 # and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
-{% set qt_version = "6.7.3" %}
+{% set qt_version = "6.9.1" %}
 
 package:
   name: pyqt-split
   version: {{ version }}
 
 source:
-  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/PyQt{{ version[0] }}-{{ version }}.tar.gz
-    sha256: 3672a82ccd3a62e99ab200a13903421e2928e399fda25ced98d140313ad59cb9
+  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/pyqt{{ version[0] }}-{{ version }}.tar.gz
+    sha256: 50642be03fb40f1c2111a09a1f5a0f79813e039c15e78267e6faaf8a96c1c3a6
     folder: pyqt
 
   - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
-    sha256: 15be741d1ae8c82bb7afe9a61f3cf8c50457f7d61229a1c39c24cd6e8f4d86dc
+    sha256: 464ad156bf526500ce6bd05cac7a82280af6309974d816739b4a9a627156fafe
     folder: pyqt_sip
 
-  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/PyQt{{ version[0] }}_WebEngine-{{ pyqt_webengine_version }}.tar.gz
-    sha256: 68edc7adb6d9e275f5de956881e79cca0d71fad439abeaa10d823bff5ac55001
+  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/pyqt{{ version[0] }}_webengine-{{ pyqt_webengine_version }}.tar.gz
+    sha256: 6ae537e3bbda06b8e06535e4852297e0bc3b00543c47929541fcc9b11981aa25
     folder: pyqt_webengine
 
 build:
-  number: 2
-  skip: True  # [py<38]
-  skip: True  # [osx and x86_64]
+  number: 0
+  skip: True  # [py<39]
 
 outputs:
   - name: {{ pyqt_sip_pkg_name | lower }}
@@ -40,7 +39,7 @@ outputs:
         - {{ compiler('c') }}
       host:
         - python
-        - setuptools
+        - setuptools >=75.8.1
         - wheel
         - pip
       run:
@@ -77,16 +76,19 @@ outputs:
         - pkg-config
       host:
         - python
-        - pyqt-builder >=1.15,<2
-        - sip >=6.8.6,<7
+        - pyqt-builder >=1.17,<2
+        - sip >=6.12,<7
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtsvg {{ qt_version }}
         - qttools {{ qt_version }}
+        - qtwayland  {{ qt_version }}        # [linux]
         - qtwebchannel {{ qt_version }}
         - qtwebsockets {{ qt_version }}
         # OpenGL and X11 dependencies
-        - libgl-devel {{ libgl }}         # [linux]
+        - libgl-devel {{ libgl }}            # [linux]
+        - libvulkan-headers {{ libvulkan }}  # [not osx]
+        - libvulkan-loader {{ libvulkan }}   # [not osx]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -141,15 +143,17 @@ outputs:
         - pkg-config
       host:
         - python
-        - pyqt-builder >=1.15,<2
-        - sip >=6.8.6,<7
+        - pyqt-builder >=1.17,<2
+        - sip >=6.9,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtwebchannel {{ qt_version }}
         - qtwebengine {{ qt_version }}
         # OpenGL and X11 dependencies
-        - libgl-devel {{ libgl }}         # [linux]
+        - libgl-devel {{ libgl }}            # [linux]
+        - libvulkan-headers {{ libvulkan }}  # [not osx]
+        - libvulkan-loader {{ libvulkan }}   # [not osx]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
@@ -179,7 +183,6 @@ about:
 
 extra:
   skip-lints:
-    - missing_wheel
     - missing_python_build_tool
     - host_section_needs_exact_pinnings
   recipe-maintainers:

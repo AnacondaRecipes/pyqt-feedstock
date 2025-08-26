@@ -1,5 +1,3 @@
-# For some reason, on OSX, the RPATH of sip-build artifacts is set wrong and triggers overlinking errors in CI. To
-# avoid this, we turn off overlinking checks in CI. They should still be done in local builds.
-build_parameters:
-  - "--suppress-variables"
-  - "--skip-existing"
+# Need at least a 12.0 host or else tests will fail.
+extra_labels_for_os:
+  osx-arm64: [ventura]
