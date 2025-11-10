@@ -5,7 +5,7 @@
 
 # The version of Qt packages being built against must match because sip detects the version for some things in qt-main
 # and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
-{% set qt_version = "6.9.1" %}
+{% set qt_version = "6.9.2" %}
 
 package:
   name: pyqt-split
@@ -25,7 +25,7 @@ source:
     folder: pyqt_webengine
 
 build:
-  number: 0
+  number: 1
   skip: True  # [py<39]
 
 outputs:
