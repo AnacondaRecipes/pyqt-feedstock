@@ -1,3 +1,2 @@
-# Need at least a 12.0 host or else tests will fail.
-extra_labels_for_os:
-  osx-arm64: [ventura]
+build_env_vars:
+  ANACONDA_ROCKET_ENABLE_PY314 : yes
