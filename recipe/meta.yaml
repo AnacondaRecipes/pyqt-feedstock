@@ -179,6 +179,7 @@ outputs:
         - xorg-libice {{ xorg_libice }}                 # [linux]
         - xorg-libxcomposite {{ xorg_libxcomposite }}   # [linux]
         - xorg-libxxf86vm {{ xorg_libxxf86vm }}         # [linux]
+        - xorg-libxrandr {{ xorg_libxrandr }}           # [linux]
         #- xorg-xf86vidmodeproto {{ xorg_xf86vidmodeproto }} # [linux]
       run:
         - qt-main 5.15.*
