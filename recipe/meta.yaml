@@ -109,8 +109,6 @@ outputs:
     test:
       files:
         - pyqt_test.py
-      # we don't have 
-{% if enable_testingui %}
       imports:
         - PyQt5
         - PyQt5.sip
@@ -131,7 +129,6 @@ outputs:
         - PyQt5.QtWidgets
         - PyQt5.QtXml
         - PyQt5.QtXmlPatterns
-{% endif %}
       requires:
         - pip
       commands:
@@ -189,12 +186,10 @@ outputs:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
     test:
-{% if enable_testingui %}
       imports:
         - PyQt5.QtWebEngine
         - PyQt5.QtWebEngineCore
         - PyQt5.QtWebEngineWidgets
-{% endif %}
       requires:
         - pip
       commands:
@@ -247,10 +242,8 @@ outputs:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
     test:
-{% if enable_testingui %}
       imports:
         - PyQt5.QtChart
-{% endif %}
       requires:
         - pip
       commands:
