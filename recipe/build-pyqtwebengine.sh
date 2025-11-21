@@ -17,11 +17,6 @@ if [[ $(uname) == "Linux" ]]; then
 
     chmod +x g++ gcc gcc-ar
     export PATH=${PWD}:${PATH}
-
-    SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
-    export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
-    export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
-    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS"
 fi
 
 if [[ $(uname) == "Darwin" ]]; then
@@ -34,11 +29,6 @@ sip-build \
 --no-make
 
 pushd build
-
-# For some reason SIP does not add the QtPrintSupport headers
-cat QtWebEngineWidgets/Makefile | sed -r 's|INCPATH       =(.*)|INCPATH       =\1 -I'$PREFIX/include/qt/QtPrintSupport'|' > QtWebEngineWidgets/Makefile.temp
-rm QtWebEngineWidgets/Makefile
-mv QtWebEngineWidgets/Makefile.temp QtWebEngineWidgets/Makefile
 
 CPATH=$PREFIX/include make -j$CPU_COUNT
 make install
