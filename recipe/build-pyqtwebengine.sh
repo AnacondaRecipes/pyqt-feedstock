@@ -2,6 +2,12 @@ set -exou
 
 pushd pyqt_webengine
 
+SIP_ARGS="
+  --qmake-setting QMAKE_CC=${CC_FOR_BUILD}
+  --qmake-setting QMAKE_CXX=${CXX_FOR_BUILD}
+  --qmake-setting QMAKE_LINK=${CXX_FOR_BUILD}
+"
+
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
     echo USED_BUILD_PREFIX=${BUILD_PREFIX}
@@ -17,6 +23,12 @@ if [[ $(uname) == "Linux" ]]; then
 
     chmod +x g++ gcc gcc-ar
     export PATH=${PWD}:${PATH}
+
+    SIP_ARGS="${SIP_ARGS}
+      --qmake-setting QMAKE_AR_CMD=${USED_BUILD_PREFIX}/bin/${HOST}-gcc-ar
+      --qmake-setting QMAKE_INCDIR_OPENGL=${PREFIX}/include
+      --qmake-setting QMAKE_LIBDIR_OPENGL=${PREFIX}/lib
+    "
 fi
 
 if [[ $(uname) == "Darwin" ]]; then
@@ -24,7 +36,7 @@ if [[ $(uname) == "Darwin" ]]; then
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
 fi
 
-sip-build \
+sip-build ${SIP_ARGS} \
 --verbose \
 --no-make
 
