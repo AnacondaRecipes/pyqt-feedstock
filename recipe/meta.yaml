@@ -180,11 +180,12 @@ outputs:
         - xorg-libxcomposite {{ xorg_libxcomposite }}   # [linux]
         - xorg-libxxf86vm {{ xorg_libxxf86vm }}         # [linux]
         # needed by qt-webengine at runtime - qt-webengine was built with cdts
+        # if we ever rebuilt qt-webengine wihtout cdts, this can be removed
         - xorg-libxrender {{ xorg_libxrender }}        # [linux]
         - xorg-libxrandr {{ xorg_libxrandr }}          # [linux]
         - xorg-libxtst {{ xorg_libxtst }}              # [linux]
         - xorg-libxfixes {{ xorg_libxfixes }}          # [linux]
-        #- xorg-xf86vidmodeproto {{ xorg_xf86vidmodeproto }} # [linux]
+        - alsa-lib {{ alsa_lib }}                      # [linux]
       run:
         - qt-main 5.15.*
         - qt-webengine 5.15.*
