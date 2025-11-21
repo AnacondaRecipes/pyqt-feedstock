@@ -32,8 +32,7 @@ source:
     folder: pyqt_charts
 
 build:
-  number: 1
-  skip: true  # [ppc64le or s390x]
+  number: 2
 
 outputs:
   - name: pyqt5-sip
@@ -43,6 +42,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
       host:
         - python
         - setuptools
@@ -72,55 +72,10 @@ outputs:
         - $RPATH/libpthread.so.0
         - $RPATH/libc.so.6
     requirements:
-      run_constrained:   # [osx and x86_64]
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext') }}               # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libgbm') }}           # [linux]
-        - {{ cdt('mesa-libegl') }}           # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux') }}            # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage') }}            # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes') }}             # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm') }}            # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('libxcb-devel') }}          # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('expat-devel') }}           # [linux and not aarch64]
-        - {{ cdt('pcre') }}                  # [linux and not x86_64]
-        - {{ cdt('libglvnd-glx') }}          # [linux and not x86_64]
-        - {{ cdt('libglvnd-egl') }}          # [linux and not x86_64]
-        - {{ cdt('libxkbcommon-devel') }}    # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-devel') }}        # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-image-devel') }}  # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-keysyms-devel') }}     # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-renderutil-devel') }}  # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-wm-devel') }}          # [linux and not (aarch64 or x86_64)]
+        - {{ stdlib('c') }}
         - jom                                # [win]
         - make  # [not win]
         - pkg-config
@@ -129,8 +84,23 @@ outputs:
         - pyqt-builder >=1.14.1,<2
         - sip >=6.6.2,<7
         - qt-main 5.15.*
-        - {{ cdt('mesa-libgl-devel') }}          # [linux]
-        - {{ cdt('mesa-libegl-devel') }}         # [linux]
+        - libgl-devel {{ libgl }}                # [linux]
+        - libegl-devel {{ libegl }}              # [linux]
+        - libopengl-devel {{ libopengl }}        # [linux]
+        - xorg-xorgproto {{ xorg_xorgproto }}    # [linux]
+        - xcb-util {{ xcb_util }}                # [linux]
+        - xcb-util-wm {{ xcb_util_wm }}          # [linux]
+        - xcb-util-keysyms {{ xcb_util_keysyms }}       # [linux]
+        - xcb-util-image {{ xcb_util_image }}           # [linux]
+        - xcb-util-renderutil {{ xcb_util_renderutil }} # [linux]
+        - xorg-libx11 {{ xorg_libx11 }}                 # [linux]
+        - xorg-libxext {{ xorg_libxext }}               # [linux]
+        - xorg-libxdamage {{ xorg_libxdamage }}         # [linux]
+        - xorg-libsm {{ xorg_libsm }}                   # [linux]
+        - xorg-libice {{ xorg_libice }}                 # [linux]
+        - xorg-libxcomposite {{ xorg_libxcomposite }}   # [linux]
+        - xorg-libxxf86vm {{ xorg_libxxf86vm }}         # [linux]
+        #- xorg-xf86vidmodeproto {{ xorg_xf86vidmodeproto }} # [linux]
       run:
         - qt-main 5.15*
         - python
@@ -181,54 +151,10 @@ outputs:
         - $RPATH/libpthread.so.0
         - $RPATH/libc.so.6
     requirements:
-      run_constrained:   # [osx and x86_64]
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext') }}               # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libegl') }}           # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux') }}            # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage') }}            # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes') }}             # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm') }}            # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('libxcb-devel') }}          # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('expat-devel') }}           # [linux and not aarch64]
-        - {{ cdt('pcre') }}                  # [linux and not x86_64]
-        - {{ cdt('libglvnd-glx') }}          # [linux and not x86_64]
-        - {{ cdt('libglvnd-egl') }}          # [linux and not x86_64]
-        - {{ cdt('libxkbcommon-devel') }}    # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-devel') }}        # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-image-devel') }}  # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-keysyms-devel') }}     # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-renderutil-devel') }}  # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-wm-devel') }}          # [linux and not (aarch64 or x86_64)]
+        - {{ stdlib('c') }}
         - jom                                    # [win]
         - make  # [not win]
         - pkg-config
@@ -239,8 +165,23 @@ outputs:
         - {{ pin_subpackage('pyqt', exact=True) }}
         - qt-main 5.15.*
         - qt-webengine  5.15.*
-        - {{ cdt('mesa-libgl-devel') }}          # [linux]
-        - {{ cdt('mesa-libegl-devel') }}         # [linux]
+        - libgl-devel {{ libgl }}                # [linux]
+        - libegl-devel {{ libegl }}              # [linux]
+        - libopengl-devel {{ libopengl }}        # [linux]
+        - xorg-xorgproto {{ xorg_xorgproto }}    # [linux]
+        - xcb-util {{ xcb_util }}                # [linux]
+        - xcb-util-wm {{ xcb_util_wm }}          # [linux]
+        - xcb-util-keysyms {{ xcb_util_keysyms }}       # [linux]
+        - xcb-util-image {{ xcb_util_image }}           # [linux]
+        - xcb-util-renderutil {{ xcb_util_renderutil }} # [linux]
+        - xorg-libx11 {{ xorg_libx11 }}                 # [linux]
+        - xorg-libxext {{ xorg_libxext }}               # [linux]
+        - xorg-libxdamage {{ xorg_libxdamage }}         # [linux]
+        - xorg-libsm {{ xorg_libsm }}                   # [linux]
+        - xorg-libice {{ xorg_libice }}                 # [linux]
+        - xorg-libxcomposite {{ xorg_libxcomposite }}   # [linux]
+        - xorg-libxxf86vm {{ xorg_libxxf86vm }}         # [linux]
+        #- xorg-xf86vidmodeproto {{ xorg_xf86vidmodeproto }} # [linux]
       run:
         - qt-main 5.15.*
         - qt-webengine 5.15.*
@@ -270,54 +211,10 @@ outputs:
         - $RPATH/libpthread.so.0
         - $RPATH/libc.so.6
     requirements:
-      run_constrained:   # [osx and x86_64]
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-        - {{ cdt('libx11-devel') }}          # [linux]
-        - {{ cdt('libxext') }}               # [linux]
-        - {{ cdt('libxext-devel') }}         # [linux]
-        - {{ cdt('libxrender-devel') }}      # [linux]
-        - {{ cdt('mesa-libgl-devel') }}      # [linux]
-        - {{ cdt('mesa-libegl') }}           # [linux]
-        - {{ cdt('mesa-libegl-devel') }}     # [linux]
-        - {{ cdt('mesa-dri-drivers') }}      # [linux]
-        - {{ cdt('libxau-devel') }}          # [linux]
-        - {{ cdt('alsa-lib-devel') }}        # [linux]
-        - {{ cdt('gtk2-devel') }}            # [linux]
-        - {{ cdt('gtkmm24-devel') }}         # [linux]
-        - {{ cdt('libdrm-devel') }}          # [linux]
-        - {{ cdt('libxcomposite-devel') }}   # [linux]
-        - {{ cdt('libxcursor-devel') }}      # [linux]
-        - {{ cdt('libxi-devel') }}           # [linux]
-        - {{ cdt('libxrandr-devel') }}       # [linux]
-        - {{ cdt('pciutils-devel') }}        # [linux]
-        - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-        - {{ cdt('libxtst-devel') }}         # [linux]
-        - {{ cdt('libselinux') }}            # [linux]
-        - {{ cdt('libselinux-devel') }}      # [linux]
-        - {{ cdt('libxdamage') }}            # [linux]
-        - {{ cdt('libxdamage-devel') }}      # [linux]
-        - {{ cdt('libxfixes') }}             # [linux]
-        - {{ cdt('libxfixes-devel') }}       # [linux]
-        - {{ cdt('libxxf86vm') }}            # [linux]
-        - {{ cdt('libxxf86vm-devel') }}      # [linux]
-        - {{ cdt('libsm-devel') }}           # [linux]
-        - {{ cdt('libice-devel') }}          # [linux]
-        - {{ cdt('libxcb') }}                # [linux]
-        - {{ cdt('libxcb-devel') }}          # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('expat-devel') }}           # [linux and not aarch64]
-        - {{ cdt('pcre') }}                  # [linux and not x86_64]
-        - {{ cdt('libglvnd-glx') }}          # [linux and not x86_64]
-        - {{ cdt('libglvnd-egl') }}          # [linux and not x86_64]
-        - {{ cdt('libxkbcommon-devel') }}    # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-devel') }}        # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-image-devel') }}  # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-keysyms-devel') }}     # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-renderutil-devel') }}  # [linux and not (aarch64 or x86_64)]
-        - {{ cdt('xcb-util-wm-devel') }}          # [linux and not (aarch64 or x86_64)]
+        - {{ stdlib('c') }}
         - jom                                    # [win]
         - make  # [not win]
         - pkg-config
@@ -327,8 +224,23 @@ outputs:
         - sip >=5.3,<7
         - qt-main 5.15.*
         - {{ pin_subpackage('pyqt', exact=True) }}
-        - {{ cdt('mesa-libgl-devel') }}          # [linux]
-        - {{ cdt('mesa-libegl-devel') }}         # [linux]
+        - libgl-devel {{ libgl }}                # [linux]
+        - libegl-devel {{ libegl }}              # [linux]
+        - libopengl-devel {{ libopengl }}        # [linux]
+        - xorg-xorgproto {{ xorg_xorgproto }}    # [linux]
+        - xcb-util {{ xcb_util }}                # [linux]
+        - xcb-util-wm {{ xcb_util_wm }}          # [linux]
+        - xcb-util-keysyms {{ xcb_util_keysyms }}       # [linux]
+        - xcb-util-image {{ xcb_util_image }}           # [linux]
+        - xcb-util-renderutil {{ xcb_util_renderutil }} # [linux]
+        - xorg-libx11 {{ xorg_libx11 }}                 # [linux]
+        - xorg-libxext {{ xorg_libxext }}               # [linux]
+        - xorg-libxdamage {{ xorg_libxdamage }}         # [linux]
+        - xorg-libsm {{ xorg_libsm }}                   # [linux]
+        - xorg-libice {{ xorg_libice }}                 # [linux]
+        - xorg-libxcomposite {{ xorg_libxcomposite }}   # [linux]
+        - xorg-libxxf86vm {{ xorg_libxxf86vm }}         # [linux]
+        #- xorg-xf86vidmodeproto {{ xorg_xf86vidmodeproto }} # [linux]
       run:
         - qt-main 5.15.*
         - python
