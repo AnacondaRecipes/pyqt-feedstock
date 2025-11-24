@@ -3,6 +3,12 @@ set -exou
 pushd pyqt
 cp LICENSE ..
 
+SIP_ARGS="
+  --qmake-setting QMAKE_CC=${CC_FOR_BUILD}
+  --qmake-setting QMAKE_CXX=${CXX_FOR_BUILD}
+  --qmake-setting QMAKE_LINK=${CXX_FOR_BUILD}
+"
+
 if [[ $(uname) == "Linux" ]]; then
     USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
     echo USED_BUILD_PREFIX=${BUILD_PREFIX}
@@ -19,10 +25,11 @@ if [[ $(uname) == "Linux" ]]; then
     chmod +x g++ gcc gcc-ar
     export PATH=${PWD}:${PATH}
 
-    SYSROOT_FLAGS="-L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib64 -L ${BUILD_PREFIX}/${HOST}/sysroot/usr/lib"
-    export CFLAGS="$SYSROOT_FLAGS $CFLAGS"
-    export CXXFLAGS="$SYSROOT_FLAGS $CXXFLAGS"
-    export LDFLAGS="$SYSROOT_FLAGS $LDFLAGS"
+    SIP_ARGS="${SIP_ARGS}
+      --qmake-setting QMAKE_AR_CMD=${USED_BUILD_PREFIX}/bin/${HOST}-gcc-ar
+      --qmake-setting QMAKE_INCDIR_OPENGL=${PREFIX}/include
+      --qmake-setting QMAKE_LIBDIR_OPENGL=${PREFIX}/lib
+    "
 fi
 
 if [[ $(uname) == "Darwin" ]]; then
@@ -30,7 +37,7 @@ if [[ $(uname) == "Darwin" ]]; then
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
 fi
 
-sip-build \
+sip-build ${SIP_ARGS} \
 --verbose \
 --confirm-license \
 --no-make
