@@ -1,7 +1,6 @@
 channels:
   - https://staging.continuum.io/pbp/fs/pyqt-builder-feedstock/pr4/a0ae361
   - https://staging.continuum.io/pbp/fs/sip-feedstock/pr11/28b9f4b
-  - https://staging.continuum.io/pbp/fs/qtbase-feedstock/pr19/594b487
   - https://staging.continuum.io/pbp/fs/qtsvg-feedstock/pr7/8dd3837
   - https://staging.continuum.io/pbp/fs/qtshadertools-feedstock/pr7/f373784
   - https://staging.continuum.io/pbp/fs/qtdeclarative-feedstock/pr7/a783286
@@ -13,3 +12,4 @@ channels:
   - https://staging.continuum.io/pbp/fs/qtwebchannel-feedstock/pr7/0f15230
   - https://staging.continuum.io/pbp/fs/qtwayland-feedstock/pr4/8023079
   - https://staging.continuum.io/pbp/fs/qtwebengine-feedstock/pr9/29fe740
+  - https://staging.continuum.io/pbp/fs/qtbase-feedstock/pr19/11cee2a
