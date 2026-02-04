@@ -1,7 +1,3 @@
-# Need at least a 12.0 host or else tests will fail.
-extra_labels_for_os:
-  osx-arm64: [ventura]
-
 channels:
   - https://staging.continuum.io/pbp/fs/pyqt-builder-feedstock/pr4/a0ae361
   - https://staging.continuum.io/pbp/fs/sip-feedstock/pr11/28b9f4b
