@@ -1,3 +1,4 @@
+{% set name = "pyqt" %}
 {% set version = "6.10.1" %}
 {% set pyqt_webengine_version = "6.10.0" %}
 {% set pyqt_sip_version = "13.11.0" %}
@@ -8,7 +9,7 @@
 {% set qt_version = "6.10.1" %}
 
 package:
-  name: pyqt-split
+  name: {{ name }}-split
   version: {{ version }}
 
 source:
@@ -53,7 +54,7 @@ outputs:
       commands:
         - pip check
 
-  - name: pyqt
+  - name: {{ name }}
     version: {{ version }}
     script: build-pyqt.sh  # [not win]
     script: bld-pyqt.bat   # [win]
@@ -123,7 +124,7 @@ outputs:
       commands:
         - pip check
 
-  - name: pyqtwebengine
+  - name: {{ name }}webengine
     version: {{ pyqt_webengine_version }}
     script: build-pyqtwebengine.sh  # [not win]
     script: bld-pyqtwebengine.bat   # [win]
