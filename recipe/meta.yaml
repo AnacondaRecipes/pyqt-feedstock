@@ -1,11 +1,11 @@
-{% set version = "6.9.1" %}
-{% set pyqt_webengine_version = "6.9.0" %}
-{% set pyqt_sip_version = "13.10.2" %}
+{% set version = "6.10.1" %}
+{% set pyqt_webengine_version = "6.10.0" %}
+{% set pyqt_sip_version = "13.11.0" %}
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
 # The version of Qt packages being built against must match because sip detects the version for some things in qt-main
 # and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
-{% set qt_version = "6.9.1" %}
+{% set qt_version = "6.10.1" %}
 
 package:
   name: pyqt-split
@@ -13,20 +13,21 @@ package:
 
 source:
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/pyqt{{ version[0] }}-{{ version }}.tar.gz
-    sha256: 50642be03fb40f1c2111a09a1f5a0f79813e039c15e78267e6faaf8a96c1c3a6
+    sha256: d733a6c712c0b7a7b99e4ad59b211ea25a5d1b9d1131e47a1f50b5e524266e57
     folder: pyqt
 
   - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
-    sha256: 464ad156bf526500ce6bd05cac7a82280af6309974d816739b4a9a627156fafe
+    sha256: d463af37738bda1856c9ef513e5620a37b7a005e9d589c986c3304db4a8a14d3
     folder: pyqt_sip
 
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/pyqt{{ version[0] }}_webengine-{{ pyqt_webengine_version }}.tar.gz
-    sha256: 6ae537e3bbda06b8e06535e4852297e0bc3b00543c47929541fcc9b11981aa25
+    sha256: 267d27275d0c79ae270bca4b03520a41fa7e85c2a4d9632da8cb9cc233a55ad1
     folder: pyqt_webengine
 
 build:
   number: 0
-  skip: True  # [py<39]
+  # sip 13.11.0 is not supported on Python 3.9
+  skip: true  # [py<310]
 
 outputs:
   - name: {{ pyqt_sip_pkg_name | lower }}
@@ -76,8 +77,8 @@ outputs:
         - pkg-config
       host:
         - python
-        - pyqt-builder >=1.17,<2
-        - sip >=6.12,<7
+        - pyqt-builder >=1.19,<2
+        - sip >=6.13,<7
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtsvg {{ qt_version }}
@@ -143,8 +144,8 @@ outputs:
         - pkg-config
       host:
         - python
-        - pyqt-builder >=1.17,<2
-        - sip >=6.9,<7
+        - pyqt-builder >=1.19,<2
+        - sip >=6.13.1,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
