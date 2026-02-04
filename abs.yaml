@@ -16,3 +16,4 @@ channels:
   - https://staging.continuum.io/pbp/fs/qtwebsockets-feedstock/pr7/d76ed21
   - https://staging.continuum.io/pbp/fs/qtwebchannel-feedstock/pr7/0f15230
   - https://staging.continuum.io/pbp/fs/qtwayland-feedstock/pr4/8023079
+  - https://staging.continuum.io/pbp/fs/qtwebengine-feedstock/pr9/29fe740
