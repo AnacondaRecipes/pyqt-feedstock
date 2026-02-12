@@ -1,15 +1,13 @@
 channels:
-  - https://staging.continuum.io/pbp/fs/pyqt-builder-feedstock/pr4/a0ae361
-  - https://staging.continuum.io/pbp/fs/sip-feedstock/pr11/28b9f4b
-  - https://staging.continuum.io/pbp/fs/qtsvg-feedstock/pr7/8dd3837
-  - https://staging.continuum.io/pbp/fs/qtshadertools-feedstock/pr7/f373784
-  - https://staging.continuum.io/pbp/fs/qtdeclarative-feedstock/pr7/a783286
-  - https://staging.continuum.io/pbp/fs/qtimageformats-feedstock/pr8/73eacd2
-  - https://staging.continuum.io/pbp/fs/qttools-feedstock/pr7/8595bf4
-  - https://staging.continuum.io/pbp/fs/qttranslations-feedstock/pr7/9a32db9
-  - https://staging.continuum.io/pbp/fs/qt5compat-feedstock/pr7/8e0923a
-  - https://staging.continuum.io/pbp/fs/qtwebsockets-feedstock/pr7/d76ed21
-  - https://staging.continuum.io/pbp/fs/qtwebchannel-feedstock/pr7/0f15230
-  - https://staging.continuum.io/pbp/fs/qtwayland-feedstock/pr4/8023079
-  - https://staging.continuum.io/pbp/fs/qtwebengine-feedstock/pr9/29fe740
-  - https://staging.continuum.io/pbp/fs/qtbase-feedstock/pr19/11cee2a
+  - https://staging.continuum.io/pbp/fs/qtsvg-feedstock/pr8/fa29831
+  - https://staging.continuum.io/pbp/fs/qtshadertools-feedstock/pr8/8c9cbf5
+  - https://staging.continuum.io/pbp/fs/qtdeclarative-feedstock/pr8/c1592fb
+  - https://staging.continuum.io/pbp/fs/qtimageformats-feedstock/pr9/4933580
+  - https://staging.continuum.io/pbp/fs/qttools-feedstock/pr8/49e64ed
+  - https://staging.continuum.io/pbp/fs/qttranslations-feedstock/pr8/98189ae
+  - https://staging.continuum.io/pbp/fs/qt5compat-feedstock/pr8/93ade41
+  - https://staging.continuum.io/pbp/fs/qtwebsockets-feedstock/pr8/3365df4
+  - https://staging.continuum.io/pbp/fs/qtwebchannel-feedstock/pr8/8c11ca3
+  - https://staging.continuum.io/pbp/fs/qtwayland-feedstock/pr5/c3e0b99
+  - https://staging.continuum.io/pbp/fs/qtwebengine-feedstock/pr13/5560cc6
+  - https://staging.continuum.io/pbp/fs/qtbase-feedstock/pr21/901c992
