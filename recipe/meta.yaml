@@ -73,7 +73,6 @@ outputs:
         - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - jom                             # [win]
         - make                            # [not win]
         - pkg-config
       host:
@@ -140,7 +139,6 @@ outputs:
         - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - jom   # [win]
         - make  # [not win]
         - pkg-config
       host:
