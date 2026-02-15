@@ -3,7 +3,7 @@ echo on
 pushd pyqt
 copy LICENSE ..
 
-set "PATH=%cd%\jom;%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%"
+set "PATH=%LIBRARY_LIB%\qt6\bin;%LIBRARY_INC%;%PATH%"
 
 call sip-build ^
     --verbose ^
@@ -17,7 +17,10 @@ if %ERRORLEVEL% neq 0 exit 1
 
 pushd build
 
-jom
+nmake
 if %ERRORLEVEL% neq 0 exit 1
-jom install
+nmake install
 if %ERRORLEVEL% neq 0 exit 1
+
+popd
+popd
