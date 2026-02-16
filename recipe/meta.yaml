@@ -78,7 +78,7 @@ outputs:
       host:
         - python
         - pyqt-builder >=1.19,<2
-        - sip >=6.13,<7
+        - sip >=6.13.1,<7
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtsvg {{ qt_version }}
