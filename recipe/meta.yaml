@@ -168,7 +168,7 @@ outputs:
         - pip check
 
 about:
-  home: https://www.riverbankcomputing.com/software/pyqt/
+  home: https://www.riverbankcomputing.com/software/pyqt
   license: GPL-3.0-only
   license_family: GPL
   license_file: pyqt/LICENSE
