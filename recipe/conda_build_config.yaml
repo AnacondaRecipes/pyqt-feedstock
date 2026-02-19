@@ -1,13 +1,13 @@
-# Qt 6.9 builds with XCode 15 and macOS 14 SDK but supports a minimum macOS version of 12.0. This requires matching
+# Qt 6.10 builds with XCode 15 and macOS 14 SDK but supports a minimum macOS version of 12.0. This requires matching
 # compiler versions as well for something around the same version that originally shipped with XCode 15. For us,
 # that is clang 17.
 
 # https://doc.qt.io/qt-6/macos.html
 c_stdlib_version:  # [not linux]
-  - 12.0           # [osx]
+  - 12.3           # [osx]
   - 2022.12        # [win]
 OSX_SDK_VER:       # [osx]
-  - 14.5           # [osx]
+  - 15           # [osx]
 
 # https://doc.qt.io/qt-6/windows.html
 c_compiler:    # [win]
@@ -18,11 +18,9 @@ cxx_compiler:  # [win]
 # XCode 15.0 came with SDK 14.0 and clang 15
 # https://en.wikipedia.org/wiki/Xcode
 c_compiler_version:    # [osx]
-  - 17                 # [osx]
+  - 20                 # [osx]
 cxx_compiler_version:  # [osx]
-  - 17                 # [osx]
+  - 20                 # [osx]
 
-# Have to leave this for now or else the overlinking checks fail when we revert back to the aggregate CBC and use the
-# 11.1 sysroot.
-CONDA_BUILD_SYSROOT:                                         # [osx]
-  - /Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk  # [osx]
+CONDA_BUILD_SYSROOT:                                       # [osx]
+  - /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk  # [osx]

@@ -1,3 +1,0 @@
-# Need at least a 12.0 host or else tests will fail.
-extra_labels_for_os:
-  osx-arm64: [ventura]
