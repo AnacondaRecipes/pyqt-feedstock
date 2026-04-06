@@ -2,3 +2,9 @@ anaconda_config_version: 1
 upstream_sources:
   - pypi:
       identifier: PyQt5
+    packages:
+      - pyqt
+      - pyqt5-sip
+      - pyqt6-sip
+      - pyqtchart
+      - pyqtwebengine
