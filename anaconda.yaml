@@ -6,5 +6,4 @@ upstream_sources:
       - pyqt
       - pyqt5-sip
       - pyqt6-sip
-      - pyqtchart
       - pyqtwebengine
