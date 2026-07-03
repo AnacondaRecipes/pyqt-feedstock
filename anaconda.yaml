@@ -4,6 +4,12 @@ upstream_sources:
       identifier: PyQt6
     packages:
       - pyqt
-      - pyqt5-sip
-      - pyqt6-sip
       - pyqtwebengine
+  - pypi:
+      identifier: PyQt5-sip
+    packages:
+      - pyqt5-sip
+  - pypi:
+      identifier: PyQt6-sip
+    packages:
+      - pyqt6-sip
