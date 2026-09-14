@@ -87,8 +87,8 @@ outputs:
         - qtwebsockets {{ qt_version }}
         # OpenGL and X11 dependencies
         - libgl-devel {{ libgl }}            # [linux]
-        - libvulkan-headers {{ libvulkan }}  # [not osx]
-        - libvulkan-loader {{ libvulkan }}   # [not osx]
+        - libvulkan-headers 1.4  # [not osx]
+        - libvulkan-loader 1.4   # [not osx]
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
@@ -151,8 +151,8 @@ outputs:
         - qtwebengine {{ qt_version }}
         # OpenGL and X11 dependencies
         - libgl-devel {{ libgl }}            # [linux]
-        - libvulkan-headers {{ libvulkan }}  # [not osx]
-        - libvulkan-loader {{ libvulkan }}   # [not osx]
+        - libvulkan-headers 1.4  # [not osx]
+        - libvulkan-loader 1.4   # [not osx]
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
