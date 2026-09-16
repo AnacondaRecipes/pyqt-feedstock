@@ -24,3 +24,6 @@ cxx_compiler_version:  # [osx]
 
 CONDA_BUILD_SYSROOT:                                       # [osx]
   - /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk  # [osx]
+
+libvulkan:
+  - 1.4.313
