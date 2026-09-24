@@ -26,7 +26,7 @@ source:
     folder: pyqt_webengine
 
 build:
-  number: 
+  number: 1
   skip: true  # [py<310]
 
 outputs:
