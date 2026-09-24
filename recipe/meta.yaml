@@ -92,6 +92,16 @@ outputs:
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
+      # Qt's private ABI tag (QtPrivate_6_11_x) changes every patch release, so the
+      # runtime Qt stack must stay at the {{ qt_version }} patch line used to build.
+      run_constrained:
+        - qtbase {{ qt_version }}.*
+        - qtdeclarative {{ qt_version }}.*
+        - qtsvg {{ qt_version }}.*
+        - qttools {{ qt_version }}.*
+        - qtwayland {{ qt_version }}.*      # [linux]
+        - qtwebchannel {{ qt_version }}.*
+        - qtwebsockets {{ qt_version }}.*
     test:
       files:
         - pyqt_test.py
@@ -156,6 +166,11 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
+      run_constrained:
+        - qtbase {{ qt_version }}.*
+        - qtdeclarative {{ qt_version }}.*
+        - qtwebchannel {{ qt_version }}.*
+        - qtwebengine {{ qt_version }}.*
     test:
       imports:
         - PyQt6.QtWebEngineCore
