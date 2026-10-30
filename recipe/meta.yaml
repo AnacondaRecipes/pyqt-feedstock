@@ -128,10 +128,11 @@ outputs:
     script: build-pyqtwebengine.sh  # [not win]
     script: bld-pyqtwebengine.bat   # [win]
     build:
-      # py3.15: qtwebengine 6.12.0 is not on pkgs/main yet (PKG-19503).
-      # Build the py315 pyqt and pyqt6-sip outputs first; restore this output once
-      # qtwebengine 6.12.0 lands.
-      skip: true  # [py>=315]
+      # PyQt6-WebEngine has no 6.12.x release upstream (newest 6.11.0) and
+      # qtwebengine on pkgs/main is newest 6.11.0, so this output cannot build
+      # against the 6.12 Qt stack on any Python. Restore it once the 6.12 Qt
+      # stack and PyQt6-WebEngine 6.12 land; tracked by PKG-19503.
+      skip: true
       run_exports:
         - {{ pin_subpackage('pyqtwebengine', max_pin='x.x') }}
       missing_dso_whitelist:
