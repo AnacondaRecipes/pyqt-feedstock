@@ -1,12 +1,13 @@
 {% set name = "pyqt" %}
-{% set version = "6.11.0" %}
+{% set version = "6.12.0" %}
+# No PyQt6-WebEngine 6.12.0 on PyPI yet (newest 6.11.0); this output is skipped on py>=315 (PKG-19503).
 {% set pyqt_webengine_version = "6.11.0" %}
-{% set pyqt_sip_version = "13.11.1" %}
+{% set pyqt_sip_version = "13.13.0" %}
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
 # The version of Qt packages being built against must match because sip detects the version for some things in qt-main
 # and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
-{% set qt_version = "6.11.0" %}
+{% set qt_version = "6.12.0" %}
 
 package:
   name: {{ name }}-split
@@ -14,11 +15,11 @@ package:
 
 source:
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}/pyqt{{ version[0] }}-{{ version }}.tar.gz
-    sha256: 45dd60aa69976de1918b5ced6b4e7b6a25abd2a919ecef5fd5826ecc76718889
+    sha256: d3e021b716bae880224422f9d1b894d2d53de7e60e60dbc43f860723f9cc300b
     folder: pyqt
 
   - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
-    sha256: 869c5b48afe38e55b1ee0dd72182b0886e968cc509b98023ff50010b013ce1be
+    sha256: 2cd55f575cde208c398d6cfdecc5a13394ed2afb54226210c50e3a6df7c3a997
     folder: pyqt_sip
 
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/pyqt{{ version[0] }}_webengine-{{ pyqt_webengine_version }}.tar.gz
@@ -26,8 +27,7 @@ source:
     folder: pyqt_webengine
 
 build:
-  # Published 6.11.0 is build 0 except win-arm64, which is already build 1.
-  number: 2
+  number: 0
   skip: true  # [py<310]
 
 outputs:
@@ -128,6 +128,10 @@ outputs:
     script: build-pyqtwebengine.sh  # [not win]
     script: bld-pyqtwebengine.bat   # [win]
     build:
+      # py3.15: qtwebengine 6.12.0 is not on pkgs/main yet (PKG-19503).
+      # Build the py315 pyqt and pyqt6-sip outputs first; restore this output once
+      # qtwebengine 6.12.0 lands.
+      skip: true  # [py>=315]
       run_exports:
         - {{ pin_subpackage('pyqtwebengine', max_pin='x.x') }}
       missing_dso_whitelist:
