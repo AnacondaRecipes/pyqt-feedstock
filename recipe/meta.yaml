@@ -1,7 +1,9 @@
 {% set name = "pyqt" %}
 {% set version = "6.12.0" %}
-# No PyQt6-WebEngine 6.12.0 on PyPI yet (newest 6.11.0); this output is skipped on py>=315 (PKG-19503).
-{% set pyqt_webengine_version = "6.11.0" %}
+# PyQt6-WebEngine 6.140.0 uses Riverbank's new <Qt minor>.<Chromium> scheme: it is
+# Qt WebEngine 6.140 built on Qt 6.12 (see upstream NEWS). The output stays skipped
+# until qtwebengine 6.12.0 reaches pkgs/main (PKG-19503).
+{% set pyqt_webengine_version = "6.140.0" %}
 {% set pyqt_sip_version = "13.13.0" %}
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
@@ -23,7 +25,7 @@ source:
     folder: pyqt_sip
 
   - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/pyqt{{ version[0] }}_webengine-{{ pyqt_webengine_version }}.tar.gz
-    sha256: 15cf49efbbbd4c6bc87653b2c4ae80d6049f800e31620b336734ae2e37cbedae
+    sha256: f48a7838c230f9cba822d3c2afa39f199e74ada5c219075879993760c7f9457c
     folder: pyqt_webengine
 
 build:
@@ -74,11 +76,14 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - make                            # [not win]
+        - jom                             # [win]
         - pkg-config
       host:
         - python
+        # Upstream asks for pyqt-builder >=1.20; pkgs/main currently caps at 1.19.1,
+        # which builds PyQt6 6.12.0 successfully.
         - pyqt-builder >=1.19,<2
-        - sip >=6.15,<7
+        - sip >=6.17,<7
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
         - qtsvg {{ qt_version }}
@@ -93,6 +98,8 @@ outputs:
       run:
         - python
         - {{ pin_subpackage(pyqt_sip_pkg_name | lower, exact=True) }}
+        # Qt6Gui links libxkbcommon; qtbase-devel's run_exports does not pull it in.
+        - libxkbcommon  # [linux]
     test:
       files:
         - pyqt_test.py
@@ -128,10 +135,9 @@ outputs:
     script: build-pyqtwebengine.sh  # [not win]
     script: bld-pyqtwebengine.bat   # [win]
     build:
-      # PyQt6-WebEngine has no 6.12.x release upstream (newest 6.11.0) and
-      # qtwebengine on pkgs/main is newest 6.11.0, so this output cannot build
-      # against the 6.12 Qt stack on any Python. Restore it once the 6.12 Qt
-      # stack and PyQt6-WebEngine 6.12 land; tracked by PKG-19503.
+      # qtwebengine 6.12.0 is not on pkgs/main yet (newest 6.11.0), so this output
+      # cannot build against the Qt 6.12 stack on any Python. Restore it once
+      # qtwebengine 6.12.0 lands; tracked by PKG-19503.
       skip: true
       run_exports:
         - {{ pin_subpackage('pyqtwebengine', max_pin='x.x') }}
@@ -145,11 +151,13 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - make  # [not win]
+        - jom   # [win]
         - pkg-config
       host:
         - python
+        # Upstream asks for pyqt-builder >=1.20; pkgs/main currently caps at 1.19.1.
         - pyqt-builder >=1.19,<2
-        - sip >=6.15,<7
+        - sip >=6.17,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
         - qtbase-devel {{ qt_version }}
         - qtdeclarative {{ qt_version }}
@@ -162,6 +170,8 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('pyqt', max_pin='x.x') }}
+        # Qt6Gui links libxkbcommon; qtbase-devel's run_exports does not pull it in.
+        - libxkbcommon  # [linux]
     test:
       imports:
         - PyQt6.QtWebEngineCore
