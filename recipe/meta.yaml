@@ -1,14 +1,13 @@
 {% set name = "pyqt" %}
 {% set version = "6.12.0" %}
-# PyQt6-WebEngine 6.140.0 uses Riverbank's new <Qt minor>.<Chromium> scheme: it is
-# Qt WebEngine 6.140 built on Qt 6.12 (see upstream NEWS). The output stays skipped
-# until qtwebengine 6.12.0 reaches pkgs/main (PKG-19503).
+# The optional WebEngine output targets Qt 6.12, but qtwebengine 6.12.0 is not
+# on pkgs/main yet. Keep this output skipped until that dependency is available.
 {% set pyqt_webengine_version = "6.140.0" %}
 {% set pyqt_sip_version = "13.13.0" %}
 {% set pyqt_sip_pkg_name = "PyQt" + version[0] + "-sip" %}
 
-# The version of Qt packages being built against must match because sip detects the version for some things in qt-main
-# and then assumes that the remaining packages, such as qtwebengine, will also be at that exact same version.
+# The Qt package versions should match: sip detects the version in qt-main and
+# assumes the remaining Qt packages, including qtwebengine, use the same version.
 {% set qt_version = "6.12.0" %}
 
 package:
@@ -23,10 +22,6 @@ source:
   - url: https://pypi.org/packages/source/P/{{ pyqt_sip_pkg_name }}/{{ pyqt_sip_pkg_name.replace("-", "_") | lower }}-{{ pyqt_sip_version }}.tar.gz
     sha256: 2cd55f575cde208c398d6cfdecc5a13394ed2afb54226210c50e3a6df7c3a997
     folder: pyqt_sip
-
-  - url: https://pypi.org/packages/source/P/PyQt{{ version[0] }}-WebEngine/pyqt{{ version[0] }}_webengine-{{ pyqt_webengine_version }}.tar.gz
-    sha256: f48a7838c230f9cba822d3c2afa39f199e74ada5c219075879993760c7f9457c
-    folder: pyqt_webengine
 
 build:
   number: 0
@@ -135,9 +130,8 @@ outputs:
     script: build-pyqtwebengine.sh  # [not win]
     script: bld-pyqtwebengine.bat   # [win]
     build:
-      # qtwebengine 6.12.0 is not on pkgs/main yet (newest 6.11.0), so this output
-      # cannot build against the Qt 6.12 stack on any Python. Restore it once
-      # qtwebengine 6.12.0 lands; tracked by PKG-19503.
+      # qtwebengine 6.12.0 is not on pkgs/main yet, so this output cannot build
+      # against the Qt 6.12 stack. Restore it when that dependency is available.
       skip: true
       run_exports:
         - {{ pin_subpackage('pyqtwebengine', max_pin='x.x') }}
@@ -155,7 +149,6 @@ outputs:
         - pkg-config
       host:
         - python
-        # Upstream asks for pyqt-builder >=1.20; pkgs/main currently caps at 1.19.1.
         - pyqt-builder >=1.19,<2
         - sip >=6.17,<7
         - {{ pin_subpackage('pyqt', exact=True) }}
