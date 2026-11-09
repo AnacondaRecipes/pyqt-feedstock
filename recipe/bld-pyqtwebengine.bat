@@ -14,7 +14,7 @@ if %ERRORLEVEL% neq 0 exit 1
 
 pushd build
 
-jom -j%CPU_COUNT%
+nmake
 if %ERRORLEVEL% neq 0 exit 1
-jom install
+nmake install
 if %ERRORLEVEL% neq 0 exit 1
