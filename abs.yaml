@@ -1,3 +1,6 @@
+# win-arm64 PyQt6 builds exceed the 2-hour default ABS task limit.
+task_timeout: 54000
+
 # Opt into the experimental Python 3.15 variant. Gated in the aggregate
 # conda_build_config.yaml on ANACONDA_ROCKET_ENABLE_PY315 only.
 build_env_vars:
