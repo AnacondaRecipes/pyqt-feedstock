@@ -71,6 +71,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - make                            # [not win]
+        - jom                             # [win]
         - pkg-config
       host:
         - python
@@ -144,6 +145,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - make  # [not win]
+        - jom   # [win]
         - pkg-config
       host:
         - python
